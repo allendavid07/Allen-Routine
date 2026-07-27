@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Allen's Daily Routine</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Playfair+Display:wght@600;700&display=swap');
+
+:root {
+  --bg:#0c0e14; --surface:#13161f; --card:#191d28; --border:#252b3a;
+  --accent:#7c9ef5; --green:#5dba8c; --amber:#e8c060; --peach:#e8a07a;
+  --purple:#a47cf5; --warn:#e07c7c; --text:#dde3f0; --muted:#6a7490;
+  --done-bg:#182820; --done-border:#1f3828; --done-text:#4aaa7a;
+  --morning-col:#e8c060; --night-col:#a47cf5; --hair-col:#5dba8c; --body-col:#e8a07a;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;padding-bottom:90px;overflow-x:hidden}
+
+/* ── HEADER ── */
+.greeting-banner{background:linear-gradient(135deg,#141828,#0e1118);border-bottom:1px solid var(--border);padding:18px 20px 14px;position:sticky;top:0;z-index:200}
+.greeting-row{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.greeting-left{flex:1}
+.greeting-tag{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.greeting-text{font-family:'Playfair Display',serif;font-size:19px;color:var(--text);line-height:1.2}
+.greeting-text span{color:var(--accent)}
+.clock-badge{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:6px 12px;text-align:right;flex-shrink:0;margin-left:12px}
+.clock-time{font-size:16px;font-weight:600;color:var(--accent);font-variant-numeric:tabular-nums;letter-spacing:.5px}
+.clock-date{font-size:10px;color:var(--muted);display:block;margin-top:1px}
+.derma-tip{background:linear-gradient(90deg,#1a1f30,#141828);border:1px solid #2a3050;border-radius:10px;padding:9px 12px;font-size:12px;color:#a0b0e0;line-height:1.45;display:flex;gap:8px;align-items:flex-start;margin-bottom:10px}
+.derma-tip em{color:var(--accent);font-style:normal;font-weight:500}
+.progress-label{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:5px}
+.progress-wrap{background:var(--border);border-radius:4px;height:4px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:4px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+
+/* ── DAY TABS ── */
+.day-tabs-wrap{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.day-tabs-wrap::-webkit-scrollbar{display:none}
+.day-tab{flex-shrink:0;padding:7px 13px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;text-align:center;user-select:none}
+.day-tab .t-short{font-size:10px;display:block;opacity:.7}
+.day-tab .t-num{font-size:14px;font-weight:600}
+.day-tab.active{background:var(--accent);color:#0c0e14;border-color:var(--accent)}
+.day-tab.is-today:not(.active){border-color:var(--accent);color:var(--accent)}
+
+/* ── CONTENT ── */
+.content{padding:14px 18px}
+.active-section-banner{background:linear-gradient(135deg,#1c2235,#141828);border:1px solid #2a3555;border-radius:14px;padding:14px 16px;margin-bottom:14px;display:flex;gap:12px;align-items:center}
+.active-icon{font-size:28px;flex-shrink:0}
+.active-label{font-size:10px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.active-title{font-family:'Playfair Display',serif;font-size:16px;color:var(--text);margin-bottom:4px}
+.active-desc{font-size:12px;color:#8090b0;line-height:1.4}
+.day-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.day-title{font-family:'Playfair Display',serif;font-size:20px;color:var(--text)}
+.today-chip{font-size:10px;background:#1a2540;border:1px solid var(--accent);color:var(--accent);padding:2px 8px;border-radius:10px;margin-left:8px;font-family:'DM Sans',sans-serif;font-weight:500}
+.reset-btn{background:none;border:1px solid var(--border);color:var(--muted);font-size:11px;padding:5px 10px;border-radius:12px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.reset-btn:active{border-color:var(--warn);color:var(--warn)}
+.section{margin-bottom:20px}
+.section-label{display:flex;align-items:center;gap:8px;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.sect-dot{width:6px;height:6px;border-radius:50%}
+.d-morning{background:var(--morning-col)} .d-night{background:var(--night-col)} .d-hair{background:var(--hair-col)} .d-body{background:var(--body-col)}
+.info-box{border-radius:10px;padding:10px 14px;margin-bottom:8px;font-size:12px;line-height:1.45;display:flex;gap:8px;align-items:flex-start}
+.info-box.hair-info{background:#162820;border:1px solid #1f3828;color:var(--green)}
+.info-box.warn-info{background:#1e1a10;border:1px solid #3a3010;color:var(--amber)}
+.info-box-icon{font-size:15px;flex-shrink:0}
+
+/* ── TASK CARD ── */
+.task{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:12px 14px 12px 16px;display:flex;align-items:flex-start;gap:11px;margin-bottom:8px;cursor:pointer;transition:transform .18s,border-color .18s,background .25s,box-shadow .2s;position:relative;overflow:hidden;user-select:none}
+.task::after{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px}
+.task.morning::after{background:var(--morning-col);opacity:.4}
+.task.night::after{background:var(--night-col);opacity:.4}
+.task.hair::after{background:var(--hair-col);opacity:.4}
+.task.body::after{background:var(--body-col);opacity:.4}
+.task.active-now{border-color:#3a4a70;background:#161c2a;box-shadow:0 0 0 1px #3a4a7040}
+.task:active{transform:scale(.98)}
+.task.done{background:var(--done-bg);border-color:var(--done-border);opacity:.72}
+.task.done::after{background:var(--green)!important;opacity:1}
+.task.holding{border-color:var(--amber)!important;box-shadow:0 0 0 2px #e8c06040!important;background:#1e1c10!important;transform:scale(.975)}
+.task.replaced{border-color:var(--green)!important}
+
+.check-circle{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .22s}
+.task.done .check-circle{background:var(--green);border-color:var(--green)}
+.task.active-now .check-circle{border-color:var(--accent)}
+.check-svg{display:none}
+.task.done .check-svg{display:block}
+
+.task-body{flex:1;min-width:0}
+.task-name{font-size:14px;font-weight:500;color:var(--text);margin-bottom:4px;transition:color .22s;display:flex;align-items:center;gap:6px}
+.task.done .task-name{color:var(--done-text);text-decoration:line-through;text-decoration-color:#2a5a38}
+.replaced-badge{font-size:9px;font-weight:700;letter-spacing:.5px;background:#1a3020;border:1px solid var(--green);color:var(--green);padding:1px 7px;border-radius:8px;text-transform:uppercase;flex-shrink:0}
+.task-instruction{font-size:11.5px;color:#8898c0;line-height:1.5;margin-bottom:4px}
+.task-instruction strong{color:#aac0e0;font-weight:600}
+.task-instruction .why{color:#6a7a9a;font-style:italic}
+.task-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:2px}
+.task-time-badge{font-size:10px;font-weight:600;color:var(--muted);background:var(--surface);border:1px solid var(--border);padding:2px 8px;border-radius:10px}
+.task-time-badge.active-time{background:#1a2540;border-color:var(--accent);color:var(--accent)}
+.now-chip{font-size:10px;font-weight:600;background:#1e2a10;border:1px solid #4a7a20;color:#8aba40;padding:2px 8px;border-radius:10px;animation:pulse 2s infinite}
+.hold-hint{font-size:10px;color:#504060;padding:2px 0;font-style:italic}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+
+/* ── HOLD PROGRESS RING ── */
+.hold-ring-wrap{position:absolute;top:10px;right:10px;width:28px;height:28px;display:none}
+.task.holding .hold-ring-wrap{display:block}
+.hold-ring-bg{fill:none;stroke:#2a2a3a;stroke-width:3}
+.hold-ring-fill{fill:none;stroke:var(--amber);stroke-width:3;stroke-linecap:round;stroke-dasharray:75.4;stroke-dashoffset:75.4;transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset .05s linear}
+
+/* ── MODAL OVERLAY ── */
+.modal-overlay{position:fixed;inset:0;background:#00000090;z-index:500;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
+.modal-overlay.show{opacity:1;pointer-events:all}
+.modal-sheet{background:#1a1e2c;border-radius:22px 22px 0 0;padding:24px 22px 36px;width:100%;max-width:480px;transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.modal-overlay.show .modal-sheet{transform:translateY(0)}
+.modal-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 20px}
+.modal-title{font-family:'Playfair Display',serif;font-size:18px;color:var(--text);margin-bottom:6px}
+.modal-sub{font-size:12px;color:var(--muted);margin-bottom:20px;line-height:1.5}
+.modal-product-name{font-size:13px;font-weight:600;color:var(--amber);background:#1e1a10;border:1px solid #3a2f10;padding:8px 12px;border-radius:8px;margin-bottom:20px}
+.modal-btn-row{display:flex;gap:10px;margin-bottom:0}
+.modal-btn{flex:1;padding:13px;border-radius:12px;border:none;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s}
+.modal-btn.primary{background:var(--accent);color:#0c0e14}
+.modal-btn.secondary{background:var(--card);color:var(--muted);border:1px solid var(--border)}
+.modal-btn:active{transform:scale(.97)}
+
+/* Replace form */
+.replace-form{display:none}
+.replace-form.show{display:block}
+.form-label{font-size:11px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;display:block}
+.form-input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color .2s;margin-bottom:14px}
+.form-input:focus{border-color:var(--accent)}
+.form-input::placeholder{color:var(--muted)}
+.form-hint{font-size:11px;color:var(--muted);margin-bottom:16px;line-height:1.45}
+.ai-generating{display:none;align-items:center;gap:10px;background:#13161f;border:1px solid #2a3050;border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.ai-generating.show{display:flex}
+.ai-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:bounce .9s infinite}
+.ai-dot:nth-child(2){animation-delay:.15s}
+.ai-dot:nth-child(3){animation-delay:.3s}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.ai-label{font-size:12px;color:#a0b0e0}
+
+/* success toast */
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);background:#1e3020;border:1px solid var(--green);color:var(--green);font-size:13px;font-weight:500;padding:10px 20px;border-radius:20px;opacity:0;pointer-events:none;transition:all .3s;z-index:600;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── BOTTOM BAR ── */
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);padding:10px 20px 16px;display:flex;justify-content:space-between;align-items:center;z-index:200}
+.done-count{font-size:12px;color:var(--muted)}
+.done-count strong{color:var(--green);font-size:14px}
+.all-done{background:linear-gradient(135deg,var(--green),#3a9a6a);color:#0c0e14;font-weight:700;font-size:12px;padding:7px 16px;border-radius:20px;display:none;animation:pop .3s cubic-bezier(.4,0,.2,1)}
+@keyframes pop{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
+.all-done.show{display:block}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="greeting-banner">
+  <div class="greeting-row">
+    <div class="greeting-left">
+      <div class="greeting-tag">Dermatologist Protocol</div>
+      <div class="greeting-text" id="greetingText">Good morning, <span>Allen</span> 👋</div>
+    </div>
+    <div class="clock-badge">
+      <div class="clock-time" id="clockTime">--:--</div>
+      <span class="clock-date" id="clockDate">--</span>
+    </div>
+  </div>
+  <div class="derma-tip"><span style="font-size:14px;flex-shrink:0;margin-top:1px">🩺</span><span id="dermaTipText">Loading tip...</span></div>
+  <div class="progress-label">
+    <span id="progressLabel">Today's completion</span>
+    <span id="progressText">0 / 0</span>
+  </div>
+  <div class="progress-wrap"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+</div>
+
+<!-- DAY TABS -->
+<div class="day-tabs-wrap" id="dayTabs"></div>
+
+<!-- CONTENT -->
+<div class="content" id="content"></div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+
+    <!-- Step 1: Finished? -->
+    <div id="step1">
+      <div class="modal-title">Product finished? 🧴</div>
+      <div class="modal-sub">You're holding on:</div>
+      <div class="modal-product-name" id="modalProductName">—</div>
+      <div class="modal-sub">Is this product finished or do you want to replace it with something new?</div>
+      <div class="modal-btn-row">
+        <button class="modal-btn secondary" onclick="closeModal()">Cancel</button>
+        <button class="modal-btn primary" onclick="showStep2()">Yes, Replace It →</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Enter new product -->
+    <div id="step2" class="replace-form">
+      <div class="modal-title">New product details ✍️</div>
+      <div class="modal-sub">Enter your new product. Our AI dermatologist will generate personalised instructions for it automatically.</div>
+      <label class="form-label">New product name</label>
+      <input class="form-input" id="newProductName" placeholder="e.g. Minimalist 2% SA+LHA Cleanser" autocomplete="off" />
+      <label class="form-label">Any extra info? <span style="font-weight:400;text-transform:none">(optional)</span></label>
+      <input class="form-input" id="newProductExtra" placeholder="e.g. 100ml, for oily skin, salicylic acid" autocomplete="off" />
+      <div class="form-hint">💡 The more detail you add, the more precise the instructions will be.</div>
+      <div class="ai-generating" id="aiGenerating">
+        <div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div>
+        <span class="ai-label">Generating dermatologist instructions...</span>
+      </div>
+      <div class="modal-btn-row">
+        <button class="modal-btn secondary" onclick="backToStep1()">← Back</button>
+        <button class="modal-btn primary" id="confirmReplaceBtn" onclick="confirmReplace()">Generate & Replace →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- BOTTOM BAR -->
+<div class="bottom-bar">
+  <div class="done-count">Done: <strong id="doneCount">0</strong> tasks</div>
+  <div class="all-done" id="allDone">🎉 Routine complete!</div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// CONSTANTS
+// ─────────────────────────────────────────────
+const DAYS  = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const SHORT = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+function getTimeSlot(h){
+  if(h<6) return 0; if(h<10) return 1; if(h<13) return 2;
+  if(h<17) return 3; if(h<20) return 4; return 5;
+}
+
+const dermaTips = {
+  0:`<em>Tip:</em> Your skin is in deep repair mode right now. Avoid touching your face. Let overnight actives finish their work.`,
+  1:`<em>Morning window is open.</em> Cleanse first to remove overnight sebum. <strong>Never skip sunscreen</strong> — UV penetrates glass and clouds.`,
+  2:`<em>Midday check:</em> If skin feels oily, blot gently — <strong>do not re-wash</strong>. Over-cleansing strips your barrier. Reapply SPF if outdoors 2+ hours.`,
+  3:`<em>Afternoon:</em> Stay hydrated — internal hydration shows on skin. Water plumps cells from within, no product can replicate that.`,
+  4:`<em>Evening:</em> Good time for hair serum on no-wash days. Skin barrier is more permeable at night — actives absorb up to 30% better after 8 PM.`,
+  5:`<em>Night is prime time.</em> Vitamin C works best now — no UV to destabilise it. <strong>Never sleep without moisturiser</strong> — water loss peaks overnight.`
+};
+
+function getGreeting(h){
+  if(h<5)  return 'Still up,';
+  if(h<12) return 'Good morning,';
+  if(h<17) return 'Good afternoon,';
+  if(h<21) return 'Good evening,';
+  return 'Good night,';
+}
+
+// ─────────────────────────────────────────────
+// ROUTINE DATA  (overrides stored in localStorage per task)
+// ─────────────────────────────────────────────
+const defaultRoutines = {
+  morning:[
+    { id:'m1', name:'Derma Co 2% Salicylic Acid Face Wash',
+      instruction:`Wet face with <strong>lukewarm water</strong>. Apply a coin-sized amount. Lather for <strong>60 seconds</strong>, focusing on T-zone. Rinse. Pat dry — <strong>never rub</strong>.`,
+      why:`SA at 2% dissolves excess sebum and dead cells inside pores. Morning cleanse removes overnight bacteria and oil.`,
+      switchNote:`⚠️ ~15% remaining — switch to Minimalist SA+LHA Cleanser when finished.`,
+      timeSlot:1, type:'morning', time:'Morning'},
+    { id:'m2', name:'Dot & Key Cica Oil-Free Moisturizer',
+      instruction:`Apply while face is <strong>slightly damp</strong> (within 60 seconds of drying). Use 2 fingertip units. Press gently — <strong>do not drag</strong>. Focus on cheeks and forehead.`,
+      why:`Cica calms inflammation and strengthens the skin barrier. Oil-free formula won't add to oiliness or clog pores.`,
+      timeSlot:1, type:'morning', time:'Morning'},
+    { id:'m3', name:'Detan Dewy Sunscreen SPF 50+',
+      instruction:`Most critical step. Apply <strong>at least ¼ teaspoon</strong> for face alone. Spread evenly. Apply <strong>15 mins before sun exposure</strong>. Reapply every 2 hours if outdoors.`,
+      why:`UV radiation is the #1 cause of pigmentation, premature aging, and dark spots. Without SPF, all your other products work at 30% efficiency.`,
+      timeSlot:1, type:'morning', time:'Morning'},
+    { id:'m4', name:'Nivea Men Fresh Active Deodorant',
+      instruction:`Apply to <strong>clean, dry underarms</strong>. Allow to dry before dressing. Do not apply on broken or freshly shaved skin — wait 20 mins.`,
+      why:`72h protection when applied correctly once in the morning.`,
+      timeSlot:1, type:'morning', time:'Morning'},
+  ],
+  body:[
+    { id:'b1', name:'Dermatouch Kojic Acid 1% Syndet Soap',
+      instruction:`pH 5.5 — gentle unlike alkaline soaps. Lather and <strong>leave on for 30–60 seconds</strong> before rinsing. Focus on neck, arms, and uneven patches.`,
+      why:`Kojic acid inhibits melanin production, targeting tan lines and pigmentation. Syndet format preserves skin's acid mantle.`,
+      timeSlot:1, type:'body', time:'Shower'},
+  ],
+  sanfe:{ id:'b2', name:'Sanfe Instant Tan & Dead Skin Removal Gel',
+    instruction:`Apply on <strong>arms, neck, body only — never face</strong>. Circular motions for 2–3 mins. Rinse with water. <strong>Max 3× per week.</strong>`,
+    why:`Physical + chemical exfoliation removes dead skin, helps Kojic acid penetrate deeper, reveals brighter skin.`,
+    timeSlot:1, type:'body', time:'Shower'},
+  night:[
+    { id:'n1', name:'Derma Co 2% Salicylic Acid Face Wash',
+      instruction:`Evening cleanse is <strong>more important</strong> than morning. Lather for <strong>90 seconds</strong> — removing SPF, pollution, and oil. Rinse with cool water to prep skin for serums.`,
+      why:`Sleeping with SPF residue and pollution causes breakouts. Night cleansing opens the pathway for your actives.`,
+      switchNote:`⚠️ ~15% remaining — switch to Minimalist SA+LHA Cleanser when finished.`,
+      timeSlot:5, type:'night', time:'Night'},
+    { id:'n2', name:'Minimalist Vitamin C + Glow Serum',
+      instruction:`Apply on <strong>completely dry face</strong> — wait 2–3 mins after washing. Use 3–4 drops. Press into skin, don't rub. Focus on pigmented areas. <strong>Wait 3 minutes</strong> before moisturizer.`,
+      why:`Vitamin C inhibits melanin and brightens dark spots. Night application avoids UV degradation, making it significantly more effective.`,
+      timeSlot:5, type:'night', time:'Night'},
+    { id:'n3', name:'Dot & Key Cica Oil-Free Moisturizer',
+      instruction:`<strong>Final step</strong> — seals in the Vitamin C serum. Use slightly more than morning. Press in upward strokes. Skin loses more water at night (TEWL).`,
+      why:`Moisturizer creates an occlusive barrier preventing water loss and locking in actives. Cica promotes overnight skin repair.`,
+      timeSlot:5, type:'night', time:'Night'},
+  ],
+  hair:{
+    ketocip:{
+      note:'Ketocip Wash Day (Mon & Thu) — Medical Antifungal Protocol', noteIcon:'💊',
+      tasks:[
+        { id:'h1', name:'Apply Minimalist CPH + Oligopeptide Serum',
+          instruction:`Part hair into sections. Apply dropper <strong>directly to scalp skin</strong>. Massage in circles for <strong>2–3 minutes</strong>. Cover crown, temples, nape.`,
+          why:`Climbazole + Piroctone Olamine need dwell time. Massage boosts microcirculation. Essential before wash.`,
+          timeSlot:1, type:'hair', time:'Pre-wash'},
+        { id:'h2', name:'Wait 1 Full Hour',
+          instruction:`Set a timer. <strong>Do not wash off early.</strong> Do your face routine during this wait.`,
+          why:`Climbazole needs contact time to disrupt fungal cell membranes. Early rinse reduces efficacy by up to 60%.`,
+          timeSlot:1, type:'hair', time:'Pre-wash'},
+        { id:'h3', name:'Ketocip Ketoconazole 2% Shampoo',
+          instruction:`Apply to wet scalp. Good lather. <strong>Leave 3–5 minutes</strong> — medically essential. Rinse thoroughly. This washes off CPH serum and Ketocip together.`,
+          why:`Ketoconazole 2% controls Malassezia fungus — primary cause of dandruff and scalp inflammation that worsens hair loss.`,
+          timeSlot:1, type:'hair', time:'Wash'},
+        { id:'h4', name:'Plom Rosemary Redensyl Hair Growth Serum',
+          instruction:`Towel dry to <strong>damp, not dripping</strong>. Apply serum to scalp in sections. Massage 2 minutes. <strong>Do NOT rinse — leave-in.</strong>`,
+          why:`Rosemary stimulates blood flow to follicles. Redensyl activates dormant follicle stem cells — directly addressing density and graying.`,
+          timeSlot:1, type:'hair', time:'Post-wash'},
+      ]
+    },
+    regular:{
+      note:'Regular Wash Day (Wed & Sat) — Maintenance Protocol', noteIcon:'🌿',
+      tasks:[
+        { id:'h5', name:'Apply Minimalist CPH + Oligopeptide Serum',
+          instruction:`Same as Ketocip days — part hair, apply dropper to scalp, massage circles for <strong>2–3 minutes</strong>.`,
+          why:`3–4× per week coverage prevents fungal regrowth between Ketocip wash days.`,
+          timeSlot:1, type:'hair', time:'Pre-wash'},
+        { id:'h6', name:'Wait 1 Full Hour',
+          instruction:`Mandatory wait. Use for face routine. <strong>Do not wet hair during this period.</strong>`,
+          why:`Non-negotiable dwell time for CPH actives to work effectively on scalp.`,
+          timeSlot:1, type:'hair', time:'Pre-wash'},
+        { id:'h7', name:'Mild / Regular Shampoo Rinse',
+          instruction:`Mild or sulfate-free shampoo if available. Gentle lather. Rinse off CPH serum completely. <strong>No vigorous scrubbing.</strong>`,
+          why:`On non-Ketocip days, mild cleanse removes oil without stripping. Overusing Ketocip causes resistance.`,
+          timeSlot:1, type:'hair', time:'Wash'},
+        { id:'h8', name:'Plom Rosemary Redensyl Hair Growth Serum',
+          instruction:`Apply on damp scalp. Section hair, apply to scalp. Massage 2 minutes. <strong>Leave-in.</strong>`,
+          why:`Daily application of Rosemary + Redensyl gives compounding growth results over weeks.`,
+          timeSlot:1, type:'hair', time:'Post-wash'},
+      ]
+    },
+    nowash:{
+      note:'No Hair Wash Today — Serum-Only Protocol', noteIcon:'✨',
+      tasks:[
+        { id:'h9', name:'Plom Rosemary Redensyl Serum on Dry Scalp',
+          instruction:`Apply on <strong>dry scalp</strong>. Part hair in sections. Dispense at roots. Massage circles for <strong>2–3 minutes</strong>. Leave-in.`,
+          why:`On no-wash days, skip CPH (needs rinsing). Plom applied daily gives consistent follicle stimulation.`,
+          timeSlot:1, type:'hair', time:'Morning / Evening'},
+      ]
+    }
+  }
+};
+
+const hairType = {0:'nowash',1:'ketocip',2:'nowash',3:'regular',4:'ketocip',5:'nowash',6:'regular'};
+const sanfeDays = [2,4,6];
+
+// ─────────────────────────────────────────────
+// PRODUCT OVERRIDES (persisted in localStorage)
+// ─────────────────────────────────────────────
+const OVERRIDES_KEY = 'allen_product_overrides_v2';
+function loadOverrides(){ try{ return JSON.parse(localStorage.getItem(OVERRIDES_KEY)||'{}'); }catch{return{};} }
+function saveOverrides(o){ try{ localStorage.setItem(OVERRIDES_KEY, JSON.stringify(o)); }catch{} }
+
+// Merge defaults + overrides
+function getTask(defaultTask){
+  const ov = loadOverrides();
+  if(ov[defaultTask.id]) return {...defaultTask, ...ov[defaultTask.id]};
+  return {...defaultTask};
+}
+
+// ─────────────────────────────────────────────
+// AI INSTRUCTION GENERATION
+// ─────────────────────────────────────────────
+async function generateInstructions(productName, extra, oldTaskContext){
+  const prompt = `You are a professional dermatologist and trichologist (hair specialist) giving precise, clinical instructions to a patient.
+
+The patient (Allen) is replacing their old skincare/hair product with a new one.
+
+Old product context:
+- Old product name: "${oldTaskContext.name}"
+- Routine step: "${oldTaskContext.time}" (${oldTaskContext.type} routine)
+- Purpose in routine: This step is for ${oldTaskContext.type === 'morning' ? 'morning skincare' : oldTaskContext.type === 'night' ? 'night skincare' : oldTaskContext.type === 'hair' ? 'hair/scalp care' : 'body care'}
+
+New product the patient just purchased:
+- Name: "${productName}"
+- Extra info provided: "${extra || 'none'}"
+
+Write the instructions JSON with exactly these two fields:
+{
+  "instruction": "Step-by-step how to use this specific product. Use <strong> tags for key actions. Be precise about quantities, timing, water temperature, wait times, technique. 2–4 sentences.",
+  "why": "One sentence explaining the dermatological reason for using this product in this step of the routine."
+}
+
+Respond ONLY with the JSON object. No markdown, no explanation, no preamble.`;
+
+  const resp = await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      model:'claude-sonnet-4-6',
+      max_tokens:400,
+      messages:[{role:'user',content:prompt}]
+    })
+  });
+  const data = await resp.json();
+  const text = (data.content||[]).map(b=>b.text||'').join('').trim();
+  const clean = text.replace(/```json|```/g,'').trim();
+  return JSON.parse(clean);
+}
+
+// ─────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────
+let selectedDayIndex = new Date().getDay();
+let selectedDateStr  = new Date().toISOString().split('T')[0];
+let checkedState     = {};
+let holdTimer        = null;
+let holdTarget       = null; // { taskEl, taskObj, ringFill }
+let holdProgress     = 0;
+let modalTask        = null; // task currently being replaced
+
+function storageKey(di,ds){ return `allen_routine_${ds}_d${di}`; }
+function loadChecked(ds,di){ try{ const r=localStorage.getItem(storageKey(di,ds)); return r?JSON.parse(r):{}; }catch{return{};} }
+function saveChecked(ds,di,c){ try{ localStorage.setItem(storageKey(di,ds),JSON.stringify(c)); }catch{} }
+
+// ─────────────────────────────────────────────
+// CLOCK
+// ─────────────────────────────────────────────
+function updateClock(){
+  const now=new Date(), h=now.getHours(), m=now.getMinutes();
+  document.getElementById('clockTime').textContent=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+  document.getElementById('clockDate').textContent=now.toLocaleDateString('en-IN',{day:'numeric',month:'short'});
+  document.getElementById('greetingText').innerHTML=`${getGreeting(h)} <span>Allen</span>`;
+  document.getElementById('dermaTipText').innerHTML=dermaTips[getTimeSlot(h)];
+  document.getElementById('progressLabel').textContent=selectedDateStr===now.toISOString().split('T')[0]?"Today's completion":"Day completion";
+}
+
+// ─────────────────────────────────────────────
+// WEEK DATES
+// ─────────────────────────────────────────────
+function getWeekDates(){
+  const today=new Date(), dow=today.getDay();
+  const mon=new Date(today); mon.setDate(today.getDate()-((dow+6)%7));
+  return Array.from({length:7},(_,i)=>{ const d=new Date(mon); d.setDate(mon.getDate()+i); return d; });
+}
+
+// ─────────────────────────────────────────────
+// BUILD SECTIONS
+// ─────────────────────────────────────────────
+function buildSections(di){
+  const hair=defaultRoutines.hair[hairType[di]];
+  const morningTasks = defaultRoutines.morning.map(getTask);
+  const bodyTasks    = defaultRoutines.body.map(getTask);
+  if(sanfeDays.includes(di)) bodyTasks.push(getTask(defaultRoutines.sanfe));
+  const hairTasks    = hair.tasks.map(getTask);
+  const nightTasks   = defaultRoutines.night.map(getTask);
+  return [
+    {label:'Morning Routine',  dotClass:'d-morning', tasks:morningTasks},
+    {label:'Shower & Body',    dotClass:'d-body',    tasks:bodyTasks},
+    {label:'Hair Care',        dotClass:'d-hair',    hairNote:hair.note, hairIcon:hair.noteIcon, tasks:hairTasks},
+    {label:'Night Routine',    dotClass:'d-night',   tasks:nightTasks},
+  ];
+}
+
+// ─────────────────────────────────────────────
+// ACTIVE BANNER
+// ─────────────────────────────────────────────
+function getActiveSectionInfo(){
+  const h=new Date().getHours();
+  if(h<6)  return{icon:'🌙',title:'Rest Time',desc:`Skin is in deep repair mode. No routine needed right now — rest is skincare.`};
+  if(h<10) return{icon:'☀️',title:'Morning Routine — Active Now',desc:`Start your face wash now. Complete morning skincare before breakfast for best absorption.`};
+  if(h<13) return{icon:'🧴',title:'Shower & Hair Time',desc:`Ideal time to shower. On Ketocip/wash days, apply CPH serum first and wait the full hour.`};
+  if(h<17) return{icon:'💧',title:'Midday — Stay Hydrated',desc:`Drink water. Reapply SPF 50+ if you've been outdoors. No routine steps needed.`};
+  if(h<20) return{icon:'🌅',title:'Evening — Pre-Night Prep',desc:`Good time for Plom serum on no-wash days. Skin actives absorb better at night.`};
+  return{icon:'🌙',title:'Night Routine — Active Now',desc:`Begin night routine now. Cleanse thoroughly to remove the entire day before applying Vitamin C serum.`};
+}
+
+// ─────────────────────────────────────────────
+// RENDER TABS
+// ─────────────────────────────────────────────
+function renderTabs(){
+  const el=document.getElementById('dayTabs');
+  el.innerHTML='';
+  const today=new Date();
+  getWeekDates().forEach(d=>{
+    const dow=d.getDay(), ds=d.toISOString().split('T')[0];
+    const isToday=d.toDateString()===today.toDateString(), isSel=ds===selectedDateStr;
+    const tab=document.createElement('div');
+    tab.className='day-tab'+(isSel?' active':'')+(isToday?' is-today':'');
+    tab.innerHTML=`<span class="t-short">${SHORT[dow]}</span><span class="t-num">${d.getDate()}</span>`;
+    tab.onclick=()=>selectDay(dow,ds);
+    el.appendChild(tab);
+  });
+}
+
+// ─────────────────────────────────────────────
+// RENDER CONTENT
+// ─────────────────────────────────────────────
+function renderContent(){
+  const container=document.getElementById('content');
+  container.innerHTML='';
+  const now=new Date();
+  const isToday=selectedDateStr===now.toISOString().split('T')[0];
+  const slot=getTimeSlot(now.getHours());
+  const ov=loadOverrides();
+
+  // Banner
+  if(isToday){
+    const info=getActiveSectionInfo();
+    const b=document.createElement('div'); b.className='active-section-banner';
+    b.innerHTML=`<div class="active-icon">${info.icon}</div><div class="active-info"><div class="active-label">Right Now</div><div class="active-title">${info.title}</div><div class="active-desc">${info.desc}</div></div>`;
+    container.appendChild(b);
+  }
+
+  // Transition note
+  const tw=document.createElement('div'); tw.className='info-box warn-info';
+  tw.innerHTML=`<span class="info-box-icon">⚠️</span><span><strong>Face Wash Transition:</strong> Derma Co SA Wash is ~15% remaining. Complete it, then switch to <strong>Minimalist SA+LHA Cleanser</strong> for both morning and night.</span>`;
+  container.appendChild(tw);
+
+  // Day header
+  const dh=document.createElement('div'); dh.className='day-header';
+  dh.innerHTML=`<div class="day-title">${DAYS[selectedDayIndex]}${isToday?'<span class="today-chip">Today</span>':''}</div><button class="reset-btn" onclick="resetDay()">↺ Reset</button>`;
+  container.appendChild(dh);
+
+  // Hold hint
+  const hint=document.createElement('div');
+  hint.style.cssText='font-size:11px;color:#404060;font-style:italic;margin-bottom:12px;padding-left:2px';
+  hint.textContent='Hold & press any product card to replace it';
+  container.appendChild(hint);
+
+  const sections=buildSections(selectedDayIndex);
+  let total=0, done=0, taskIdCounter=0;
+
+  sections.forEach(sec=>{
+    const secEl=document.createElement('div'); secEl.className='section';
+    const lbl=document.createElement('div'); lbl.className='section-label';
+    lbl.innerHTML=`<span class="sect-dot ${sec.dotClass}"></span>${sec.label}`;
+    secEl.appendChild(lbl);
+
+    if(sec.hairNote){
+      const hn=document.createElement('div'); hn.className='info-box hair-info';
+      hn.innerHTML=`<span class="info-box-icon">${sec.hairIcon}</span><span><strong>${sec.hairNote}</strong></span>`;
+      secEl.appendChild(hn);
+    }
+
+    sec.tasks.forEach(task=>{
+      const uid=`t_${taskIdCounter++}`;
+      total++;
+      const isDone=!!checkedState[uid];
+      if(isDone) done++;
+      const isActive=isToday&&!isDone&&task.timeSlot===slot;
+      const isReplaced=!!ov[task.id];
+
+      const taskEl=document.createElement('div');
+      taskEl.className=`task ${task.type}${isDone?' done':''}${isActive?' active-now':''}${isReplaced?' replaced':''}`;
+      taskEl.dataset.uid=uid;
+
+      const switchHtml=task.switchNote&&!isReplaced
+        ?`<div style="font-size:11px;color:#b09030;margin-top:4px;background:#1e1a10;padding:4px 8px;border-radius:6px;">${task.switchNote}</div>`:'';
+
+      const replacedBadge=isReplaced?`<span class="replaced-badge">✓ Updated</span>`:'';
+
+      // SVG ring for hold progress
+      const ringHtml=`<div class="hold-ring-wrap"><svg width="28" height="28" viewBox="0 0 28 28"><circle class="hold-ring-bg" cx="14" cy="14" r="12"/><circle class="hold-ring-fill" cx="14" cy="14" r="12"/></svg></div>`;
+
+      taskEl.innerHTML=`
+        <div class="check-circle">
+          <svg class="check-svg" width="11" height="11" viewBox="0 0 12 12" fill="none">
+            <path d="M2 6L5 9L10 3" stroke="#0c0e14" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="task-body">
+          <div class="task-name">${task.name} ${replacedBadge}</div>
+          <div class="task-instruction">${task.instruction}<br><span class="why">Why: ${task.why}</span></div>
+          ${switchHtml}
+          <div class="task-meta">
+            <span class="task-time-badge${isActive?' active-time':''}">${task.time}</span>
+            ${isActive?'<span class="now-chip">● Do this now</span>':''}
+          </div>
+        </div>
+        ${ringHtml}`;
+
+      // TAP → toggle check
+      taskEl.addEventListener('click', ()=>toggleTask(uid, taskEl));
+
+      // HOLD → product replace
+      attachHold(taskEl, task);
+
+      secEl.appendChild(taskEl);
+    });
+
+    container.appendChild(secEl);
+  });
+
+  updateProgress(done, total);
+}
+
+// ─────────────────────────────────────────────
+// HOLD LOGIC
+// ─────────────────────────────────────────────
+const HOLD_DURATION = 700; // ms
+
+function attachHold(taskEl, taskObj){
+  let startTime=0, animFrame=null;
+  const ringFill = taskEl.querySelector('.hold-ring-fill');
+
+  function startHold(e){
+    // Don't fire if tapping check circle
+    if(e.target.closest('.check-circle')) return;
+    startTime=Date.now();
+    taskEl.classList.add('holding');
+    animFrame=requestAnimationFrame(animHold);
+  }
+
+  function animHold(){
+    const elapsed=Date.now()-startTime;
+    const pct=Math.min(elapsed/HOLD_DURATION,1);
+    // stroke-dasharray = 75.4 (2π×12)
+    ringFill.style.strokeDashoffset=75.4*(1-pct);
+    if(pct<1){ animFrame=requestAnimationFrame(animHold); }
+    else{ endHold(true); }
+  }
+
+  function cancelHold(){
+    if(animFrame){ cancelAnimationFrame(animFrame); animFrame=null; }
+    taskEl.classList.remove('holding');
+    if(ringFill) ringFill.style.strokeDashoffset='75.4';
+  }
+
+  function endHold(success){
+    cancelHold();
+    if(success){ openModal(taskObj); }
+  }
+
+  // Mouse
+  taskEl.addEventListener('mousedown', e=>{ if(e.button===0) startHold(e); });
+  taskEl.addEventListener('mouseup',   ()=>cancelHold());
+  taskEl.addEventListener('mouseleave',()=>cancelHold());
+  // Touch
+  taskEl.addEventListener('touchstart', e=>startHold(e), {passive:true});
+  taskEl.addEventListener('touchend',   ()=>cancelHold());
+  taskEl.addEventListener('touchcancel',()=>cancelHold());
+}
+
+// ─────────────────────────────────────────────
+// MODAL
+// ─────────────────────────────────────────────
+function openModal(taskObj){
+  modalTask=taskObj;
+  document.getElementById('modalProductName').textContent=taskObj.name;
+  document.getElementById('step1').style.display='block';
+  document.getElementById('step2').classList.remove('show');
+  document.getElementById('newProductName').value='';
+  document.getElementById('newProductExtra').value='';
+  document.getElementById('aiGenerating').classList.remove('show');
+  document.getElementById('confirmReplaceBtn').disabled=false;
+  document.getElementById('modalOverlay').classList.add('show');
+}
+
+function closeModal(){
+  document.getElementById('modalOverlay').classList.remove('show');
+  modalTask=null;
+}
+
+function showStep2(){
+  document.getElementById('step1').style.display='none';
+  document.getElementById('step2').classList.add('show');
+  setTimeout(()=>document.getElementById('newProductName').focus(), 300);
+}
+
+function backToStep1(){
+  document.getElementById('step1').style.display='block';
+  document.getElementById('step2').classList.remove('show');
+}
+
+async function confirmReplace(){
+  const newName = document.getElementById('newProductName').value.trim();
+  if(!newName){ document.getElementById('newProductName').focus(); return; }
+  const extra  = document.getElementById('newProductExtra').value.trim();
+
+  // Show AI generating state
+  document.getElementById('aiGenerating').classList.add('show');
+  document.getElementById('confirmReplaceBtn').disabled=true;
+  document.getElementById('confirmReplaceBtn').textContent='Generating...';
+
+  try{
+    const result = await generateInstructions(newName, extra, modalTask);
+    const ov = loadOverrides();
+    ov[modalTask.id] = {
+      name: newName,
+      instruction: result.instruction,
+      why: result.why,
+      switchNote: null, // remove old switch note
+      replacedAt: new Date().toISOString()
+    };
+    saveOverrides(ov);
+    closeModal();
+    showToast(`✓ "${newName}" added with AI instructions`);
+    renderContent();
+  } catch(err){
+    console.error(err);
+    // Fallback: save with generic instruction
+    const ov = loadOverrides();
+    ov[modalTask.id] = {
+      name: newName,
+      instruction: `Apply <strong>${newName}</strong> as directed on packaging. Follow the same technique as before for this step.`,
+      why: `Replacing ${modalTask.name} with ${newName} for this step of the routine.`,
+      switchNote: null,
+      replacedAt: new Date().toISOString()
+    };
+    saveOverrides(ov);
+    closeModal();
+    showToast(`✓ "${newName}" saved (offline mode)`);
+    renderContent();
+  }
+}
+
+// ─────────────────────────────────────────────
+// TOAST
+// ─────────────────────────────────────────────
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 3000);
+}
+
+// ─────────────────────────────────────────────
+// TASK TOGGLE
+// ─────────────────────────────────────────────
+function toggleTask(uid, el){
+  checkedState[uid]=!checkedState[uid];
+  el.classList.toggle('done', checkedState[uid]);
+  el.classList.remove('active-now');
+  el.querySelector('.task-time-badge')?.classList.remove('active-time');
+  el.querySelector('.now-chip')?.remove();
+  saveChecked(selectedDateStr, selectedDayIndex, checkedState);
+  const all=document.querySelectorAll('.task');
+  const done=Object.values(checkedState).filter(Boolean).length;
+  updateProgress(done, all.length);
+}
+
+function updateProgress(done, total){
+  const pct=total?Math.round(done/total*100):0;
+  document.getElementById('progressFill').style.width=pct+'%';
+  document.getElementById('progressText').textContent=`${done} / ${total}`;
+  document.getElementById('doneCount').textContent=done;
+  document.getElementById('allDone').classList.toggle('show', done===total&&total>0);
+}
+
+function selectDay(dow, ds){
+  selectedDayIndex=dow; selectedDateStr=ds;
+  checkedState=loadChecked(ds, dow);
+  renderTabs(); renderContent(); updateClock();
+}
+
+function resetDay(){
+  if(!confirm(`Reset all checks for ${DAYS[selectedDayIndex]}?`)) return;
+  checkedState={};
+  saveChecked(selectedDateStr, selectedDayIndex, {});
+  renderContent();
+}
+
+// Close modal on backdrop tap
+document.getElementById('modalOverlay').addEventListener('click', e=>{
+  if(e.target===document.getElementById('modalOverlay')) closeModal();
+});
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+const _today=new Date();
+selectedDayIndex=_today.getDay();
+selectedDateStr=_today.toISOString().split('T')[0];
+checkedState=loadChecked(selectedDateStr, selectedDayIndex);
+
+updateClock();
+setInterval(updateClock, 30000);
+renderTabs();
+renderContent();
+
+setTimeout(()=>{
+  document.querySelector('.day-tab.active')?.scrollIntoView({inline:'center',behavior:'smooth'});
+},120);
+</script>
+</body>
+</html>
