@@ -299,6 +299,85 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 [data-theme="light"] .toast{background:#e8f5ee}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
+/* ── PHOTO REMINDER BANNER ── */
+.photo-reminder{background:linear-gradient(135deg,#1a1430,#120e20);border:1px solid #5040a0;border-radius:14px;padding:14px 16px;margin-bottom:14px;display:none}
+.photo-reminder.show{display:block}
+.photo-reminder-title{font-size:13px;font-weight:600;color:#b090f0;margin-bottom:6px;display:flex;align-items:center;gap:7px}
+.photo-reminder-desc{font-size:12px;color:#8070b0;line-height:1.5;margin-bottom:10px}
+.photo-reminder-shots{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px}
+.photo-shot-card{background:#1e1830;border:1px solid #3a2860;border-radius:10px;padding:9px 10px}
+.photo-shot-icon{font-size:18px;margin-bottom:3px}
+.photo-shot-label{font-size:11px;font-weight:600;color:#c0a0f0}
+.photo-shot-desc{font-size:10px;color:#7060a0;line-height:1.4;margin-top:2px}
+.photo-reminder-btn{background:linear-gradient(135deg,#6040c0,#9060e0);color:#fff;border:none;border-radius:10px;padding:10px;width:100%;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer}
+[data-theme="light"] .photo-reminder{background:linear-gradient(135deg,#f0eaff,#ebe0ff);border-color:#c0a0f0}
+[data-theme="light"] .photo-reminder-title{color:#6040b0}
+[data-theme="light"] .photo-reminder-desc{color:#8060c0}
+[data-theme="light"] .photo-shot-card{background:#f5f0ff;border-color:#c0a0f0}
+[data-theme="light"] .photo-shot-label{color:#6040b0}
+[data-theme="light"] .photo-shot-desc{color:#9070c0}
+[data-theme="light"] .photo-reminder-btn{background:linear-gradient(135deg,#7050d0,#9060e0)}
+
+/* ── PRODUCT SCAN MODAL ── */
+.scan-overlay{position:fixed;inset:0;background:#00000095;z-index:550;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
+.scan-overlay.show{opacity:1;pointer-events:all}
+.scan-sheet{background:var(--modal-bg);border-radius:22px 22px 0 0;padding:22px 20px 36px;width:100%;max-width:520px;transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);max-height:90vh;overflow-y:auto}
+.scan-overlay.show .scan-sheet{transform:translateY(0)}
+.scan-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 18px}
+.scan-title{font-family:'Playfair Display',serif;font-size:17px;color:var(--text);margin-bottom:5px}
+.scan-sub{font-size:12px;color:var(--muted);margin-bottom:16px;line-height:1.5}
+
+/* camera/upload area */
+.capture-area{width:100%;aspect-ratio:4/3;border:2px dashed var(--border);border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;overflow:hidden;position:relative;background:var(--surface);margin-bottom:14px}
+.capture-area:hover{border-color:var(--accent)}
+.capture-area img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.capture-placeholder{text-align:center;pointer-events:none}
+.capture-icon{font-size:36px;margin-bottom:8px}
+.capture-label{font-size:13px;color:var(--muted);font-weight:500}
+.capture-sub{font-size:11px;color:var(--muted);opacity:.6;margin-top:3px}
+.capture-overlay-btn{position:absolute;bottom:10px;right:10px;background:#00000080;border:none;border-radius:8px;padding:6px 12px;color:#fff;font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif}
+
+/* scanned result */
+.scan-result{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px;display:none}
+.scan-result.show{display:block}
+.scan-result-label{font-size:10px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.scan-field{margin-bottom:10px}
+.scan-field-label{font-size:10px;font-weight:600;color:var(--muted);margin-bottom:4px;display:block}
+.scan-field-val{font-size:13px;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 11px;width:100%;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s}
+.scan-field-val:focus{border-color:var(--accent)}
+.scan-field-val[readonly]{opacity:.7;cursor:default}
+.scan-category-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.cat-btn{padding:6px 12px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif}
+.cat-btn.selected{background:var(--accent);color:#0c0e14;border-color:var(--accent)}
+.scan-ai-row{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--tip-border);border-radius:10px;padding:10px 13px;margin-bottom:14px;display:none}
+.scan-ai-row.show{display:flex}
+
+/* progress photo guide modal */
+.guide-overlay{position:fixed;inset:0;background:#00000095;z-index:550;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
+.guide-overlay.show{opacity:1;pointer-events:all}
+.guide-sheet{background:var(--modal-bg);border-radius:22px 22px 0 0;padding:22px 20px 36px;width:100%;max-width:520px;transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);max-height:92vh;overflow-y:auto}
+.guide-overlay.show .guide-sheet{transform:translateY(0)}
+.guide-photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.guide-photo-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;position:relative}
+.guide-photo-frame{aspect-ratio:3/4;background:var(--surface);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.guide-photo-capture{position:absolute;inset:0;opacity:0;cursor:pointer}
+.guide-photo-preview{width:100%;height:100%;object-fit:cover;display:none}
+.guide-photo-placeholder{text-align:center;pointer-events:none}
+.guide-photo-icon{font-size:28px;margin-bottom:4px}
+.guide-photo-hint{font-size:10px;color:var(--muted);line-height:1.3}
+.guide-photo-info{padding:8px 10px}
+.guide-photo-name{font-size:11px;font-weight:600;color:var(--text);margin-bottom:2px}
+.guide-photo-desc{font-size:10px;color:var(--muted);line-height:1.35}
+.guide-done-chip{position:absolute;top:6px;right:6px;background:var(--green);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;display:none}
+.guide-photo-card.captured .guide-done-chip{display:block}
+.guide-save-btn{width:100%;background:linear-gradient(135deg,#6040c0,#9060e0);color:#fff;border:none;border-radius:12px;padding:13px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-top:4px}
+
+/* inv product card with photo */
+.inv-photo{width:52px;height:52px;border-radius:10px;overflow:hidden;background:var(--border);flex-shrink:0}
+.inv-photo img{width:100%;height:100%;object-fit:cover}
+.inv-photo-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:22px}
+.inv-card-row{display:flex;gap:12px;align-items:flex-start}
+
 /* ── CONFETTI ── */
 #confetti-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;display:none}
 
@@ -370,6 +449,36 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
     <div class="page-sub">Track your skin's progress daily</div>
   </div>
   <div class="journal-content">
+
+    <!-- PROGRESS PHOTO REMINDER -->
+    <div class="photo-reminder" id="photoReminder">
+      <div class="photo-reminder-title">📸 Time for Progress Photos!</div>
+      <div class="photo-reminder-desc" id="photoReminderDesc">It's been 2 weeks since your last progress photos. Documenting now lets you visually track how your skin and hair are responding to your routine.</div>
+      <div class="photo-reminder-shots">
+        <div class="photo-shot-card">
+          <div class="photo-shot-icon">👤</div>
+          <div class="photo-shot-label">Face — Front</div>
+          <div class="photo-shot-desc">Natural light, no filter. Shows overall skin tone & pigmentation.</div>
+        </div>
+        <div class="photo-shot-card">
+          <div class="photo-shot-icon">↙️</div>
+          <div class="photo-shot-label">Face — Left Side</div>
+          <div class="photo-shot-desc">Profile view. Captures jawline, beard, and temple graying.</div>
+        </div>
+        <div class="photo-shot-card">
+          <div class="photo-shot-icon">↘️</div>
+          <div class="photo-shot-label">Face — Right Side</div>
+          <div class="photo-shot-desc">Profile view. Compare both sides for evenness.</div>
+        </div>
+        <div class="photo-shot-card">
+          <div class="photo-shot-icon">🔝</div>
+          <div class="photo-shot-label">Hair — Top View</div>
+          <div class="photo-shot-desc">Shows scalp health, gray coverage, and density progress.</div>
+        </div>
+      </div>
+      <button class="photo-reminder-btn" onclick="openPhotoGuide()">📸 Take Progress Photos Now</button>
+    </div>
+
     <div class="journal-today">
       <div class="journal-section-title">Today's Entry</div>
       <div class="form-label">How does your skin feel today?</div>
@@ -383,7 +492,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
       <div class="form-label">Notes (breakouts, dryness, reactions...)</div>
       <textarea class="journal-textarea" id="journalNote" placeholder="e.g. Slight oiliness on T-zone today. No new breakouts. Skin feels more even after the Vitamin C serum..."></textarea>
       <div class="photo-section">
-        <div class="form-label">Progress photos</div>
+        <div class="form-label">Daily skin photos</div>
         <label class="photo-upload-btn" for="photoInput">📷 Tap to add photo</label>
         <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="addPhoto(event)">
         <div class="photo-preview-grid" id="photoPreviewGrid"></div>
@@ -404,7 +513,13 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 <div class="page" id="page-inventory">
   <div class="page-header">
     <div class="page-title">Product Inventory 🧴</div>
-    <div class="page-sub">Track usage — get alerts before you run out</div>
+    <div class="page-sub">Track usage — scan new products with your camera</div>
+  </div>
+  <div style="padding:14px 18px 0">
+    <button onclick="openScanModal()" style="width:100%;background:linear-gradient(135deg,var(--accent),var(--purple));color:#0c0e14;border:none;border-radius:13px;padding:14px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:4px">
+      📸 Scan New Product Label
+    </button>
+    <div style="font-size:10px;color:var(--muted);text-align:center;margin-bottom:2px">AI reads the label and adds it to inventory automatically</div>
   </div>
   <div class="inv-content" id="invContent"></div>
 </div>
@@ -445,8 +560,9 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
     </div>
     <div id="step2" class="replace-form">
       <div class="modal-title">New product ✍️</div>
-      <div class="modal-sub">Our AI dermatologist will generate personalised instructions automatically.</div>
-      <label class="form-label">New product name</label>
+      <div class="modal-sub">Enter manually or scan the product label with your camera — AI will fill in the details.</div>
+      <button onclick="openScanFromReplace()" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--accent);border-radius:10px;padding:10px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:7px">📸 Scan Product Label with Camera</button>
+      <label class="form-label">Or type new product name</label>
       <input class="form-input" id="newProductName" placeholder="e.g. Minimalist 2% SA+LHA Cleanser" autocomplete="off"/>
       <label class="form-label">Extra info <span style="font-weight:400;text-transform:none">(optional)</span></label>
       <input class="form-input" id="newProductExtra" placeholder="e.g. 100ml, oily skin, salicylic acid" autocomplete="off"/>
@@ -463,6 +579,73 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- ══ PRODUCT SCAN MODAL ══ -->
+<div class="scan-overlay" id="scanOverlay">
+  <div class="scan-sheet">
+    <div class="scan-handle"></div>
+    <div class="scan-title">Scan New Product 📸</div>
+    <div class="scan-sub">Take a photo of the product label. AI will read the name, ingredients, and details automatically.</div>
+
+    <div class="capture-area" id="captureArea" onclick="document.getElementById('productPhotoInput').click()">
+      <div class="capture-placeholder" id="capturePlaceholder">
+        <div class="capture-icon">📷</div>
+        <div class="capture-label">Tap to take photo</div>
+        <div class="capture-sub">or choose from gallery</div>
+      </div>
+      <img id="capturedProductImg" src="" alt="" style="display:none"/>
+      <button class="capture-overlay-btn" id="retakeBtn" style="display:none" onclick="retakePhoto(event)">Retake</button>
+    </div>
+    <input type="file" id="productPhotoInput" accept="image/*" capture="environment" style="display:none" onchange="onProductPhotoCapture(event)">
+
+    <div class="scan-ai-row" id="scanAiRow">
+      <div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div>
+      <span class="ai-label">Reading product label with AI...</span>
+    </div>
+
+    <div class="scan-result" id="scanResult">
+      <div class="scan-result-label">✨ AI Detected — Edit if needed</div>
+      <div class="scan-field">
+        <label class="scan-field-label">Product Name</label>
+        <input class="scan-field-val" id="scanName" placeholder="e.g. Minimalist 2% SA+LHA Cleanser"/>
+      </div>
+      <div class="scan-field">
+        <label class="scan-field-label">Key Ingredients / Details</label>
+        <input class="scan-field-val" id="scanIngredients" placeholder="e.g. Salicylic acid 2%, LHA, Zinc"/>
+      </div>
+      <div class="scan-field">
+        <label class="scan-field-label">Volume / Size</label>
+        <input class="scan-field-val" id="scanSize" placeholder="e.g. 100ml"/>
+      </div>
+      <div class="scan-field">
+        <label class="scan-field-label">Category</label>
+        <div class="scan-category-row" id="scanCategoryRow">
+          <button class="cat-btn" onclick="selectScanCat('Face')">👤 Face</button>
+          <button class="cat-btn" onclick="selectScanCat('Hair')">💆 Hair</button>
+          <button class="cat-btn" onclick="selectScanCat('Body')">🧴 Body</button>
+          <button class="cat-btn" onclick="selectScanCat('Other')">📦 Other</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-btn-row">
+      <button class="modal-btn secondary" onclick="closeScanModal()">Cancel</button>
+      <button class="modal-btn primary" id="scanSaveBtn" onclick="saveScanProduct()" style="display:none">Add to Inventory ✓</button>
+      <button class="modal-btn primary" id="scanAnalyseBtn" onclick="analyseScanPhoto()" style="display:none">Scan Label →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PROGRESS PHOTO GUIDE MODAL ══ -->
+<div class="guide-overlay" id="guideOverlay">
+  <div class="guide-sheet">
+    <div class="scan-handle"></div>
+    <div class="scan-title">Progress Photos 📸</div>
+    <div class="scan-sub" id="guideSubText">Time to document your skin and hair progress. Take all 4 shots for accurate comparison.</div>
+    <div class="guide-photo-grid" id="guidePhotoGrid"></div>
+    <button class="guide-save-btn" onclick="saveProgressPhotos()">Save Progress Photos ✓</button>
+  </div>
+</div>
 
 <script>
 // ════════════════════════════════════════════
@@ -677,8 +860,230 @@ function loadHistory(){return sg('allen_history_v2',{});}
 function saveHistory(h){ss('allen_history_v2',h);}
 
 // ════════════════════════════════════════════
-// STREAK & HISTORY
+// PROGRESS PHOTO REMINDER
 // ════════════════════════════════════════════
+const PHOTO_INTERVAL_DAYS=14; // remind every 2 weeks
+const PROGRESS_SHOTS=[
+  {id:'front', icon:'👤', name:'Face — Front',      desc:'Natural light, no filter, neutral expression. Shows overall skin tone, pores, and pigmentation changes.',     guide:'Stand facing a window. Hold phone at eye level. Neutral expression.'},
+  {id:'left',  icon:'↙️', name:'Face — Left Side',  desc:'Left profile view. Captures left cheek, jawline, beard density, and temple graying clearly.',               guide:'Turn head 90° left. Keep chin parallel to floor.'},
+  {id:'right', icon:'↘️', name:'Face — Right Side', desc:'Right profile view. Compare both sides for asymmetric pigmentation or beard growth patterns.',               guide:'Turn head 90° right. Keep chin parallel to floor.'},
+  {id:'top',   icon:'🔝', name:'Hair — Top View',   desc:'Bird\'s-eye view of scalp. Shows hair density, gray coverage distribution, and scalp health over time.',    guide:'Tilt head forward. Hold phone above head pointing down. Good light.'},
+];
+
+function loadProgressPhotos(){return sg('allen_progress_photos_v1',[]);}
+function saveProgressPhotoData(p){ss('allen_progress_photos_v1',p);}
+
+function checkPhotoReminder(){
+  const all=loadProgressPhotos();
+  const reminder=document.getElementById('photoReminder');
+  const desc=document.getElementById('photoReminderDesc');
+  if(!all.length){
+    reminder.classList.add('show');
+    desc.textContent=`You haven't taken progress photos yet! Start now so you can track how your skin and hair respond to the routine over time.`;
+    return;
+  }
+  const last=new Date(all[all.length-1].date);
+  const daysSince=Math.floor((Date.now()-last)/(1000*60*60*24));
+  if(daysSince>=PHOTO_INTERVAL_DAYS){
+    reminder.classList.add('show');
+    desc.textContent=`It's been ${daysSince} days since your last progress photos (${all[all.length-1].date}). Time to document your progress and compare the changes!`;
+  }else{
+    reminder.classList.remove('show');
+  }
+}
+
+// ── Guide modal ──
+let guidePhotos={}; // {front: base64, left: base64, ...}
+
+function openPhotoGuide(){
+  guidePhotos={};
+  renderGuideGrid();
+  document.getElementById('guideOverlay').classList.add('show');
+}
+function closeGuideModal(){
+  document.getElementById('guideOverlay').classList.remove('show');
+}
+
+function renderGuideGrid(){
+  const grid=document.getElementById('guidePhotoGrid');
+  grid.innerHTML='';
+  PROGRESS_SHOTS.forEach(shot=>{
+    const card=document.createElement('div');
+    card.className='guide-photo-card'+(guidePhotos[shot.id]?' captured':'');
+    card.id=`guide-card-${shot.id}`;
+    card.innerHTML=`
+      <div class="guide-photo-frame">
+        <img class="guide-photo-preview" id="guide-img-${shot.id}" src="${guidePhotos[shot.id]||''}" style="${guidePhotos[shot.id]?'display:block':'display:none'}">
+        <div class="guide-photo-placeholder" id="guide-ph-${shot.id}" style="${guidePhotos[shot.id]?'display:none':''}">
+          <div class="guide-photo-icon">${shot.icon}</div>
+          <div class="guide-photo-hint">${shot.guide}</div>
+        </div>
+        <input type="file" accept="image/*" class="guide-photo-capture" onchange="captureGuidePhoto(event,'${shot.id}')">
+        <div class="guide-done-chip">✓ Done</div>
+      </div>
+      <div class="guide-photo-info">
+        <div class="guide-photo-name">${shot.name}</div>
+        <div class="guide-photo-desc">${shot.desc}</div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+function captureGuidePhoto(event,shotId){
+  const file=event.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    guidePhotos[shotId]=e.target.result;
+    const img=document.getElementById(`guide-img-${shotId}`);
+    const ph=document.getElementById(`guide-ph-${shotId}`);
+    const card=document.getElementById(`guide-card-${shotId}`);
+    img.src=e.target.result;img.style.display='block';
+    ph.style.display='none';
+    card.classList.add('captured');
+    // Update sub text
+    const done=Object.keys(guidePhotos).length;
+    document.getElementById('guideSubText').textContent=`${done}/4 photos taken. ${done<4?'Keep going!':'All done — tap Save!'}`;
+  };
+  reader.readAsDataURL(file);
+}
+
+function saveProgressPhotos(){
+  if(!Object.keys(guidePhotos).length){showToast('⚠ Take at least one photo first');return;}
+  const all=loadProgressPhotos();
+  all.push({date:new Date().toISOString().split('T')[0],photos:guidePhotos,ts:Date.now()});
+  saveProgressPhotoData(all);
+  closeGuideModal();
+  checkPhotoReminder();
+  showToast(`✓ Progress photos saved (${Object.keys(guidePhotos).length}/4)`);
+  renderJournalHistory();
+}
+
+// ════════════════════════════════════════════
+// PRODUCT SCAN MODAL
+// ════════════════════════════════════════════
+let capturedProductB64=null;
+let scanSelectedCat='Face';
+let scanContext=null; // if opened from replace modal
+
+function openScanModal(context=null){
+  scanContext=context;
+  capturedProductB64=null;
+  scanSelectedCat='Face';
+  document.getElementById('capturedProductImg').style.display='none';
+  document.getElementById('capturedProductImg').src='';
+  document.getElementById('capturePlaceholder').style.display='flex';
+  document.getElementById('retakeBtn').style.display='none';
+  document.getElementById('scanResult').classList.remove('show');
+  document.getElementById('scanAiRow').classList.remove('show');
+  document.getElementById('scanSaveBtn').style.display='none';
+  document.getElementById('scanAnalyseBtn').style.display='none';
+  document.getElementById('scanName').value='';
+  document.getElementById('scanIngredients').value='';
+  document.getElementById('scanSize').value='';
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('selected'));
+  document.querySelector('.cat-btn').classList.add('selected');
+  document.getElementById('scanOverlay').classList.add('show');
+}
+function closeScanModal(){document.getElementById('scanOverlay').classList.remove('show');scanContext=null;}
+
+function onProductPhotoCapture(event){
+  const file=event.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    capturedProductB64=e.target.result.split(',')[1];
+    const img=document.getElementById('capturedProductImg');
+    img.src=e.target.result;img.style.display='block';
+    document.getElementById('capturePlaceholder').style.display='none';
+    document.getElementById('retakeBtn').style.display='block';
+    document.getElementById('scanAnalyseBtn').style.display='block';
+    document.getElementById('scanSaveBtn').style.display='none';
+    document.getElementById('scanResult').classList.remove('show');
+  };
+  reader.readAsDataURL(file);
+}
+
+function retakePhoto(e){
+  e.stopPropagation();
+  document.getElementById('productPhotoInput').click();
+}
+
+function selectScanCat(cat){
+  scanSelectedCat=cat;
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.toggle('selected',b.textContent.includes(cat)));
+}
+
+async function analyseScanPhoto(){
+  if(!capturedProductB64){showToast('⚠ Take a photo first');return;}
+  document.getElementById('scanAiRow').classList.add('show');
+  document.getElementById('scanAnalyseBtn').style.display='none';
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-6',
+        max_tokens:400,
+        messages:[{role:'user',content:[
+          {type:'image',source:{type:'base64',media_type:'image/jpeg',data:capturedProductB64}},
+          {type:'text',text:`You are reading a skincare/haircare product label. Extract the information and respond ONLY with this JSON (no markdown):
+{"name":"full product name","ingredients":"key active ingredients comma separated","size":"volume or weight e.g. 100ml","category":"Face or Hair or Body or Other","brand":"brand name if visible"}
+If any field is not visible, use an empty string.`}
+        ]}]
+      })
+    });
+    const d=await resp.json();
+    const text=(d.content||[]).map(b=>b.text||'').join('').replace(/```json|```/g,'').trim();
+    const result=JSON.parse(text);
+    document.getElementById('scanName').value=result.name||'';
+    document.getElementById('scanIngredients').value=result.ingredients||'';
+    document.getElementById('scanSize').value=result.size||'';
+    if(result.category)selectScanCat(result.category);
+    document.getElementById('scanResult').classList.add('show');
+    document.getElementById('scanSaveBtn').style.display='block';
+  }catch{
+    // Fallback — show empty form for manual entry
+    document.getElementById('scanResult').classList.add('show');
+    document.getElementById('scanSaveBtn').style.display='block';
+    showToast('⚠ AI scan failed — fill in manually');
+  }
+  document.getElementById('scanAiRow').classList.remove('show');
+}
+
+function saveScanProduct(){
+  const name=document.getElementById('scanName').value.trim();
+  if(!name){showToast('⚠ Product name is required');document.getElementById('scanName').focus();return;}
+  const ingredients=document.getElementById('scanIngredients').value.trim();
+  const size=document.getElementById('scanSize').value.trim();
+
+  // Add to inventory
+  const inv=loadInventory();
+  const newId='custom_'+Date.now();
+  inv[newId]=100;
+  saveInventory(inv);
+
+  // Save product details
+  const products=sg('allen_custom_products_v1',[]);
+  const photoB64=document.getElementById('capturedProductImg').src||null;
+  products.push({id:newId,name,ingredients,size,category:scanSelectedCat,photo:photoB64,addedAt:new Date().toISOString()});
+  ss('allen_custom_products_v1',products);
+
+  // If opened from replace modal context, pre-fill
+  if(scanContext){
+    document.getElementById('newProductName').value=name;
+    document.getElementById('newProductExtra').value=[ingredients,size].filter(Boolean).join(', ');
+    closeScanModal();
+    showToast(`✓ "${name}" scanned — now generating instructions`);
+    confirmReplace();
+    return;
+  }
+
+  closeScanModal();
+  showToast(`✓ "${name}" added to inventory`);
+  if(document.getElementById('page-inventory').classList.contains('active'))renderInventory();
+}
+
+// Load custom products
+function loadCustomProducts(){return sg('allen_custom_products_v1',[]);}
 function recordCompletion(ds){
   const h=loadHistory();
   h[ds]='complete';
@@ -792,7 +1197,7 @@ function switchPage(name){
   document.getElementById(`nav-${name}`).classList.add('active');
   if(name==='analytics')renderAnalytics();
   if(name==='inventory')renderInventory();
-  if(name==='journal')renderJournalHistory();
+  if(name==='journal'){renderJournalHistory();checkPhotoReminder();}
 }
 
 // ════════════════════════════════════════════
@@ -1187,6 +1592,12 @@ function closeModal(){document.getElementById('modalOverlay').classList.remove('
 function showStep2(){document.getElementById('step1').style.display='none';document.getElementById('step2').classList.add('show');setTimeout(()=>document.getElementById('newProductName').focus(),300);}
 function backToStep1(){document.getElementById('step1').style.display='block';document.getElementById('step2').classList.remove('show');}
 
+function openScanFromReplace(){
+  // close replace modal temporarily, open scan with context
+  closeModal();
+  openScanModal('replace');
+}
+
 async function confirmReplace(){
   const name=document.getElementById('newProductName').value.trim();
   if(!name){document.getElementById('newProductName').focus();return;}
@@ -1425,49 +1836,69 @@ function renderInventory(){
   const container=document.getElementById('invContent');container.innerHTML='';
   const inv=loadInventory();
   const ov=loadOverrides();
+  const custom=loadCustomProducts();
 
-  const lowItems=allProducts.filter(p=>{
-    const name=ov[p.id]?.name||p.name;
-    return(inv[p.id]??100)<=20;
-  });
-
+  const lowItems=[...allProducts,...custom].filter(p=>(inv[p.id]??100)<=20);
   if(lowItems.length){
     const alert=document.createElement('div');alert.className='reorder-alert';
-    alert.innerHTML=`<span style="font-size:16px;flex-shrink:0">🛒</span><span><strong>Reorder alert:</strong> ${lowItems.map(p=>ov[p.id]?.name||p.name).join(', ')} — running low!</span>`;
+    alert.innerHTML=`<span style="font-size:16px;flex-shrink:0">🛒</span><span><strong>Reorder now:</strong> ${lowItems.map(p=>ov[p.id]?.name||p.name).join(', ')}</span>`;
     container.appendChild(alert);
   }
 
+  // Render built-in products
   const categories=[...new Set(allProducts.map(p=>p.category))];
   categories.forEach(cat=>{
     const catLabel=document.createElement('div');
-    catLabel.className='section-label';catLabel.style.marginBottom='8px';
+    catLabel.className='section-label';catLabel.style.cssText='padding:0 0 6px;';
     catLabel.innerHTML=`<span class="sect-dot" style="background:var(--accent)"></span>${cat} Products`;
     container.appendChild(catLabel);
+    allProducts.filter(p=>p.category===cat).forEach(p=>container.appendChild(buildInvCard(p,inv,ov,null)));
+    container.appendChild(Object.assign(document.createElement('div'),{style:'height:10px'}));
+  });
 
-    allProducts.filter(p=>p.category===cat).forEach(p=>{
-      const displayName=ov[p.id]?.name||p.name;
-      const pct=inv[p.id]??100;
-      const color=pct>50?'#5dba8c':pct>20?'#e8c060':'#e07c7c';
-      const status=pct>50?'Good stock 🟢':pct>20?'Running low 🟡':'Reorder now! 🔴';
+  // Render custom scanned products
+  if(custom.length){
+    const catLabel=document.createElement('div');
+    catLabel.className='section-label';catLabel.style.cssText='padding:0 0 6px;';
+    catLabel.innerHTML=`<span class="sect-dot" style="background:var(--purple)"></span>Scanned Products`;
+    container.appendChild(catLabel);
+    custom.forEach(p=>container.appendChild(buildInvCard(p,inv,ov,p.photo)));
+  }
+}
 
-      const card=document.createElement('div');card.className='inv-card';
-      card.innerHTML=`
-        <div class="inv-name">
+function buildInvCard(p,inv,ov,photo){
+  const displayName=ov[p.id]?.name||p.name;
+  const pct=inv[p.id]??100;
+  const color=pct>50?'#5dba8c':pct>20?'#e8c060':'#e07c7c';
+  const status=pct>50?'Good stock 🟢':pct>20?'Running low 🟡':'Reorder now! 🔴';
+  const card=document.createElement('div');card.className='inv-card';
+
+  const photoHtml=photo
+    ?`<div class="inv-photo"><img src="${photo}" alt="${displayName}"></div>`
+    :`<div class="inv-photo"><div class="inv-photo-placeholder">${p.category==='Hair'?'💆':p.category==='Body'?'🧴':'👤'}</div></div>`;
+
+  const extraHtml=p.ingredients?`<div style="font-size:10px;color:var(--muted);margin-top:2px">${p.ingredients}${p.size?' · '+p.size:''}</div>`:'';
+
+  card.innerHTML=`
+    <div class="inv-card-row">
+      ${photoHtml}
+      <div style="flex:1;min-width:0">
+        <div class="inv-name" style="margin-bottom:4px">
           <span>${displayName}</span>
-          <span style="font-size:11px;font-weight:400;color:var(--muted)">${cat}</span>
+          <span style="font-size:10px;font-weight:400;color:var(--muted)">${p.category||''}</span>
         </div>
-        <div class="inv-controls">
+        ${extraHtml}
+        <div class="inv-controls" style="margin-top:7px">
           <input type="range" class="inv-slider" min="0" max="100" value="${pct}" data-id="${p.id}" oninput="updateStock(this)">
           <div class="inv-pct-badge" id="badge_${p.id}" style="background:${color}20;color:${color};border:1px solid ${color}40">${pct}%</div>
         </div>
-        <div class="inv-status">
+        <div class="inv-status" style="margin-top:4px">
           <span class="inv-dot" style="background:${color}"></span>
           <span id="status_${p.id}">${status}</span>
-        </div>`;
-      container.appendChild(card);
-    });
-    container.appendChild(document.createElement('br'));
-  });
+        </div>
+      </div>
+    </div>`;
+  return card;
 }
 
 function updateStock(slider){
@@ -1489,9 +1920,15 @@ function showToast(msg){
   setTimeout(()=>t.classList.remove('show'),3000);
 }
 
-// Modal close on backdrop
+// Close modals on backdrop
 document.getElementById('modalOverlay').addEventListener('click',e=>{
   if(e.target===document.getElementById('modalOverlay'))closeModal();
+});
+document.getElementById('scanOverlay').addEventListener('click',e=>{
+  if(e.target===document.getElementById('scanOverlay'))closeScanModal();
+});
+document.getElementById('guideOverlay').addEventListener('click',e=>{
+  if(e.target===document.getElementById('guideOverlay'))closeGuideModal();
 });
 
 // ════════════════════════════════════════════
