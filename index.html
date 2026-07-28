@@ -811,16 +811,83 @@ function getTask(t){
   const ov=loadOverrides();
   return ov[t.id]?{...t,...ov[t.id]}:{...t};
 }
-function buildSections(di){
+
+// Returns a flat ordered array of phases, each with a label and ordered tasks
+// reflecting real daily sequence: wake → brush → CPH serum → wait → bath → hair → face → sunscreen → ... → night
+function buildSteps(di){
   const hair=defaultRoutines.hair[hairType[di]];
-  const bodyT=[...defaultRoutines.body.map(getTask)];
-  if(sanfeDays.includes(di))bodyT.push(getTask(defaultRoutines.sanfe));
-  return[
-    {label:'Morning Routine',dotClass:'d-morning',tasks:defaultRoutines.morning.map(getTask)},
-    {label:'Shower & Body',dotClass:'d-body',tasks:bodyT},
-    {label:'Hair Care',dotClass:'d-hair',hairNote:hair.note,hairIcon:hair.noteIcon,tasks:hair.tasks.map(getTask)},
-    {label:'Night Routine',dotClass:'d-night',tasks:defaultRoutines.night.map(getTask)},
-  ];
+  const isSanfe=sanfeDays.includes(di);
+
+  // Phase definitions — each has an icon, label, color class, and tasks in order
+  const phases=[];
+
+  // ── PHASE 1: WAKE UP & BRUSH ──
+  phases.push({
+    icon:'🌅', label:'Wake Up', sublabel:'Before anything else',
+    dotClass:'d-morning', tasks:[]
+  });
+
+  // ── PHASE 2: PRE-BATH HAIR (only on wash days) ──
+  if(hair.tasks.some(t=>t.time==='Pre-bath')){
+    const preTasks=hair.tasks.filter(t=>t.time==='Pre-bath').map(getTask);
+    phases.push({
+      icon:'💆', label:'Pre-Bath Hair Prep', sublabel:`${hair.noteIcon} ${hair.note}`,
+      dotClass:'d-hair', note:hair.note, noteIcon:hair.noteIcon,
+      tasks:preTasks
+    });
+  }
+
+  // ── PHASE 3: MORNING FACE (after brushing, before bath on wash days) ──
+  const morningFaceTasks=[getTask(defaultRoutines.morning[0])]; // face wash first
+  phases.push({
+    icon:'🪥', label:'After Brushing Teeth', sublabel:'Morning face cleanse',
+    dotClass:'d-morning', tasks:morningFaceTasks
+  });
+
+  // ── PHASE 4: BATH / SHOWER ──
+  const bathTasks=[];
+  if(isSanfe) bathTasks.push(getTask(defaultRoutines.sanfe));
+  bathTasks.push(getTask(defaultRoutines.body[0])); // Kojic soap
+  const inBathHair=hair.tasks.filter(t=>t.time==='During Bath').map(getTask);
+  bathTasks.push(...inBathHair);
+  phases.push({
+    icon:'🚿', label:'Bath / Shower', sublabel:'Body + hair wash',
+    dotClass:'d-body', tasks:bathTasks
+  });
+
+  // ── PHASE 5: AFTER BATH ──
+  const postBathTasks=[];
+  const postBathHair=hair.tasks.filter(t=>t.time==='After Bath').map(getTask);
+  postBathTasks.push(...postBathHair);          // Plom serum first (on damp hair)
+  postBathTasks.push(getTask(defaultRoutines.morning[3])); // Deodorant
+  postBathTasks.push(getTask(defaultRoutines.morning[1])); // Moisturizer
+  phases.push({
+    icon:'💧', label:'After Bath', sublabel:'Before getting dressed',
+    dotClass:'d-morning', tasks:postBathTasks
+  });
+
+  // ── PHASE 6: BEFORE GOING OUT ──
+  phases.push({
+    icon:'🌞', label:'Before Going Out', sublabel:'Last step — never skip',
+    dotClass:'d-morning', tasks:[getTask(defaultRoutines.morning[2])] // Sunscreen
+  });
+
+  // ── PHASE 7: NO-WASH HAIR SERUM (only on no-wash days, morning) ──
+  if(hairType[di]==='nowash'){
+    phases.push({
+      icon:'✨', label:'Morning Hair Serum', sublabel:'No bath wash today — serum only',
+      dotClass:'d-hair', tasks:[getTask(hair.tasks[0])]
+    });
+  }
+
+  // ── PHASE 8: NIGHT ROUTINE ──
+  phases.push({
+    icon:'🌙', label:'Night Routine', sublabel:'After dinner, before bed',
+    dotClass:'d-night', tasks:defaultRoutines.night.map(getTask)
+  });
+
+  // Remove empty phases
+  return phases.filter(p=>p.tasks.length>0);
 }
 
 // ════════════════════════════════════════════
@@ -896,17 +963,20 @@ function renderContent(){
   hint.textContent='Hold any card for 1 second to replace a finished product';
   container.appendChild(hint);
 
-  const sections=buildSections(selectedDayIndex);
+  const phases=buildSteps(selectedDayIndex);
   let total=0,done=0,tid=0;
 
-  sections.forEach(sec=>{
+  phases.forEach((sec,phaseIdx)=>{
     const secEl=document.createElement('div');secEl.className='section';
+
+    // Phase header with icon
     const lbl=document.createElement('div');lbl.className='section-label';
-    lbl.innerHTML=`<span class="sect-dot ${sec.dotClass}"></span>${sec.label}`;
+    lbl.innerHTML=`<span class="sect-dot ${sec.dotClass}"></span><span style="font-size:13px;margin-right:1px">${sec.icon}</span> ${sec.label} <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted);font-size:10px;margin-left:4px">— ${sec.sublabel}</span>`;
     secEl.appendChild(lbl);
-    if(sec.hairNote){
+
+    if(sec.noteIcon&&sec.note){
       const hn=document.createElement('div');hn.className='info-box hair-info';
-      hn.innerHTML=`<span class="info-box-icon">${sec.hairIcon}</span><span><strong>${sec.hairNote}</strong></span>`;
+      hn.innerHTML=`<span class="info-box-icon">${sec.noteIcon}</span><span><strong>${sec.note}</strong></span>`;
       secEl.appendChild(hn);
     }
     sec.tasks.forEach(task=>{
@@ -1022,9 +1092,9 @@ function toggleTask(uid,el){
 
   // Deplete inventory when checked
   if(checkedState[uid]){
-    const sections=buildSections(selectedDayIndex);
+    const phases=buildSteps(selectedDayIndex);
     let tid=0;
-    sections.forEach(sec=>sec.tasks.forEach(t=>{
+    phases.forEach(sec=>sec.tasks.forEach(t=>{
       if(`t_${tid++}`===uid){
         const inv=loadInventory();
         if(inv[t.id]!==undefined&&inv[t.id]>0){
@@ -1165,7 +1235,7 @@ function renderAnalytics(){
   const weekScores=weekDates.map(d=>{
     const ds=d.toISOString().split('T')[0],dow=d.getDay();
     const c=sg(storageKey(dow,ds),{});
-    const total=buildSections(dow).reduce((a,s)=>a+s.tasks.length,0);
+    const total=buildSteps(dow).reduce((a,s)=>a+s.tasks.length,0);
     const done=Object.values(c).filter(Boolean).length;
     return total>0?Math.round(done/total*100):0;
   });
@@ -1179,9 +1249,9 @@ function renderAnalytics(){
     const ds=k.split('_d')[0].replace('allen_routine_','');
     const dow=new Date(ds).getDay();
     if(isNaN(dow))return;
-    const secs=buildSections(dow);
+    const phases=buildSteps(dow);
     let tid=0;
-    secs.forEach(sec=>sec.tasks.forEach(task=>{
+    phases.forEach(sec=>sec.tasks.forEach(task=>{
       const uid=`t_${tid++}`;
       if(!c[uid]){
         taskSkipCount[task.name]=(taskSkipCount[task.name]||0)+1;
@@ -1248,7 +1318,7 @@ function generateHeatmap(){
     const isFuture=d>today;
     const isToday=d.toDateString()===today.toDateString();
     const checked=sg(storageKey(d.getDay(),ds),{});
-    const total=buildSections(d.getDay()).reduce((a,s)=>a+s.tasks.length,0);
+    const total=buildSteps(d.getDay()).reduce((a,s)=>a+s.tasks.length,0);
     const done=Object.values(checked).filter(Boolean).length;
     const pct=total>0?done/total:0;
     const level=isFuture?0:pct===0?0:pct<.25?1:pct<.5?2:pct<1?3:4;
