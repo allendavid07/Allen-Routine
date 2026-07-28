@@ -990,14 +990,18 @@ function onProductPhotoCapture(event){
   const file=event.target.files[0];if(!file)return;
   const reader=new FileReader();
   reader.onload=e=>{
-    capturedProductB64=e.target.result.split(',')[1];
+    const dataUrl=e.target.result;
+    // Extract raw base64 (strip the data:image/xxx;base64, prefix)
+    capturedProductB64=dataUrl.split(',')[1];
     const img=document.getElementById('capturedProductImg');
-    img.src=e.target.result;img.style.display='block';
+    img.src=dataUrl; // store full data URL so mime can be detected later
+    img.style.display='block';
     document.getElementById('capturePlaceholder').style.display='none';
     document.getElementById('retakeBtn').style.display='block';
     document.getElementById('scanAnalyseBtn').style.display='block';
     document.getElementById('scanSaveBtn').style.display='none';
     document.getElementById('scanResult').classList.remove('show');
+    document.getElementById('scanAiRow').classList.remove('show');
   };
   reader.readAsDataURL(file);
 }
@@ -1012,39 +1016,61 @@ function selectScanCat(cat){
   document.querySelectorAll('.cat-btn').forEach(b=>b.classList.toggle('selected',b.textContent.includes(cat)));
 }
 
+// ── LINKED PRODUCT IDs ──
+// Products that are the same physical item used in multiple steps.
+// When one is replaced, all linked IDs get the same override.
+const LINKED_IDS={
+  'm1':['m1','n1'], // Derma Co face wash used in both morning and night
+  'n1':['m1','n1'], // same product, night step
+};
+
 async function analyseScanPhoto(){
   if(!capturedProductB64){showToast('⚠ Take a photo first');return;}
   document.getElementById('scanAiRow').classList.add('show');
   document.getElementById('scanAnalyseBtn').style.display='none';
   try{
+    // Detect actual image mime type from stored data URL
+    const imgEl=document.getElementById('capturedProductImg');
+    const src=imgEl.src||'';
+    const mimeMatch=src.match(/^data:(image\/[a-zA-Z+]+);base64,/);
+    const mimeType=(mimeMatch&&mimeMatch[1])||'image/jpeg';
+    // Validate it's a supported type
+    const supported=['image/jpeg','image/png','image/gif','image/webp'];
+    const finalMime=supported.includes(mimeType)?mimeType:'image/jpeg';
+
     const resp=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         model:'claude-sonnet-4-6',
-        max_tokens:400,
+        max_tokens:500,
         messages:[{role:'user',content:[
-          {type:'image',source:{type:'base64',media_type:'image/jpeg',data:capturedProductB64}},
-          {type:'text',text:`You are reading a skincare/haircare product label. Extract the information and respond ONLY with this JSON (no markdown):
-{"name":"full product name","ingredients":"key active ingredients comma separated","size":"volume or weight e.g. 100ml","category":"Face or Hair or Body or Other","brand":"brand name if visible"}
-If any field is not visible, use an empty string.`}
+          {type:'image',source:{type:'base64',media_type:finalMime,data:capturedProductB64}},
+          {type:'text',text:`You are reading a skincare or haircare product label image. Extract what you can see and respond ONLY with valid JSON, no markdown fences, no explanation:
+{"name":"full product name as printed","ingredients":"key active ingredients comma separated, or empty string if not visible","size":"volume or weight e.g. 100ml, or empty string","category":"Face or Hair or Body or Other","brand":"brand name if visible, or empty string"}
+If the image is blurry or a field is not visible, use an empty string for that field. Always return valid JSON.`}
         ]}]
       })
     });
     const d=await resp.json();
-    const text=(d.content||[]).map(b=>b.text||'').join('').replace(/```json|```/g,'').trim();
-    const result=JSON.parse(text);
+    if(d.error){throw new Error(d.error.message);}
+    const raw=(d.content||[]).map(b=>b.text||'').join('').trim();
+    // Strip any accidental markdown fences
+    const clean=raw.replace(/^```[a-z]*\n?/,'').replace(/\n?```$/,'').trim();
+    const result=JSON.parse(clean);
     document.getElementById('scanName').value=result.name||'';
     document.getElementById('scanIngredients').value=result.ingredients||'';
     document.getElementById('scanSize').value=result.size||'';
     if(result.category)selectScanCat(result.category);
     document.getElementById('scanResult').classList.add('show');
     document.getElementById('scanSaveBtn').style.display='block';
-  }catch{
-    // Fallback — show empty form for manual entry
+    showToast('✓ Label scanned successfully');
+  }catch(err){
+    console.error('Scan error:',err);
+    // Always show manual form as fallback
     document.getElementById('scanResult').classList.add('show');
     document.getElementById('scanSaveBtn').style.display='block';
-    showToast('⚠ AI scan failed — fill in manually');
+    showToast('⚠ Auto-scan failed — fill in manually');
   }
   document.getElementById('scanAiRow').classList.remove('show');
 }
@@ -1061,19 +1087,27 @@ function saveScanProduct(){
   inv[newId]=100;
   saveInventory(inv);
 
-  // Save product details
+  // Save product details with photo
   const products=sg('allen_custom_products_v1',[]);
-  const photoB64=document.getElementById('capturedProductImg').src||null;
-  products.push({id:newId,name,ingredients,size,category:scanSelectedCat,photo:photoB64,addedAt:new Date().toISOString()});
+  const imgEl=document.getElementById('capturedProductImg');
+  const photoSrc=imgEl&&imgEl.src&&imgEl.src.startsWith('data:')?imgEl.src:null;
+  products.push({id:newId,name,ingredients,size,category:scanSelectedCat,photo:photoSrc,addedAt:new Date().toISOString()});
   ss('allen_custom_products_v1',products);
 
-  // If opened from replace modal context, pre-fill
-  if(scanContext){
+  // If opened from replace modal — re-open replace modal with pre-filled values
+  if(scanContext==='replace'&&modalTask){
     document.getElementById('newProductName').value=name;
     document.getElementById('newProductExtra').value=[ingredients,size].filter(Boolean).join(', ');
     closeScanModal();
-    showToast(`✓ "${name}" scanned — now generating instructions`);
-    confirmReplace();
+    // Re-open the replace modal at step 2 with data pre-filled
+    document.getElementById('modalProductName').textContent=modalTask.name;
+    document.getElementById('step1').style.display='none';
+    document.getElementById('step2').classList.add('show');
+    document.getElementById('aiGenerating').classList.remove('show');
+    document.getElementById('confirmReplaceBtn').disabled=false;
+    document.getElementById('confirmReplaceBtn').textContent='Generate & Replace →';
+    document.getElementById('modalOverlay').classList.add('show');
+    showToast(`✓ "${name}" scanned — tap Generate to continue`);
     return;
   }
 
@@ -1593,9 +1627,10 @@ function showStep2(){document.getElementById('step1').style.display='none';docum
 function backToStep1(){document.getElementById('step1').style.display='block';document.getElementById('step2').classList.remove('show');}
 
 function openScanFromReplace(){
-  // close replace modal temporarily, open scan with context
-  closeModal();
+  // Hide replace modal visually but keep modalTask intact
+  document.getElementById('modalOverlay').classList.remove('show');
   openScanModal('replace');
+  // modalTask is still set — do NOT call closeModal() here
 }
 
 async function confirmReplace(){
@@ -1605,18 +1640,37 @@ async function confirmReplace(){
   document.getElementById('aiGenerating').classList.add('show');
   document.getElementById('confirmReplaceBtn').disabled=true;
   document.getElementById('confirmReplaceBtn').textContent='Generating...';
+
+  // Find all IDs that share this physical product
+  const linkedIds=LINKED_IDS[modalTask.id]||[modalTask.id];
+
   try{
     const result=await generateInstructions(name,extra,modalTask);
     const ov=loadOverrides();
-    ov[modalTask.id]={name,instruction:result.instruction,why:result.why,switchNote:null,replacedAt:new Date().toISOString()};
+    const override={name,instruction:result.instruction,why:result.why,switchNote:null,replacedAt:new Date().toISOString()};
+    // Apply to all linked IDs
+    linkedIds.forEach(id=>{ ov[id]=override; });
     saveOverrides(ov);
-    // Add to inventory
-    const inv=loadInventory();inv[modalTask.id]=100;saveInventory(inv);
-    closeModal();showToast(`✓ "${name}" added with AI instructions`);renderContent();
-  }catch{
+    // Reset inventory to 100% for all linked IDs
+    const inv=loadInventory();
+    linkedIds.forEach(id=>{ inv[id]=100; });
+    saveInventory(inv);
+    closeModal();
+    const syncMsg=linkedIds.length>1?` (updated in ${linkedIds.length} routine steps)`:'';
+    showToast(`✓ "${name}" replaced${syncMsg}`);
+    renderContent();
+  }catch(err){
+    console.error('Replace error:',err);
     const ov=loadOverrides();
-    ov[modalTask.id]={name,instruction:`Apply <strong>${name}</strong> as directed. Follow the same technique for this step.`,why:`Replacing ${modalTask.name} with ${name} for this routine step.`,switchNote:null,replacedAt:new Date().toISOString()};
-    saveOverrides(ov);closeModal();showToast(`✓ "${name}" saved`);renderContent();
+    const override={name,instruction:`Apply <strong>${name}</strong> as directed on packaging. Follow the same technique as before for this step.`,why:`Replacing ${modalTask.name} with ${name} for this step of the routine.`,switchNote:null,replacedAt:new Date().toISOString()};
+    linkedIds.forEach(id=>{ ov[id]=override; });
+    saveOverrides(ov);
+    const inv=loadInventory();
+    linkedIds.forEach(id=>{ inv[id]=100; });
+    saveInventory(inv);
+    closeModal();
+    showToast(`✓ "${name}" saved (${linkedIds.length} step${linkedIds.length>1?'s':''} updated)`);
+    renderContent();
   }
 }
 
