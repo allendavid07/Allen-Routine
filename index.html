@@ -146,6 +146,31 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .hold-ring-fill{fill:none;stroke:var(--amber);stroke-width:3;stroke-linecap:round;stroke-dasharray:69.1;stroke-dashoffset:69.1;transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset .05s linear}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
 
+/* ── WHEN TAGS (life event sequencing) ── */
+.when-tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:3px 9px;border-radius:20px;border:1px solid;white-space:nowrap;flex-shrink:0}
+.when-tag.before-brush{background:#1a1020;border-color:#5a2080;color:#c080f0}
+.when-tag.after-brush{background:#10181a;border-color:#207060;color:#50d0b0}
+.when-tag.before-bath{background:#101828;border-color:#205080;color:#60a8f0}
+.when-tag.after-bath{background:#0e1a1a;border-color:#1a5040;color:#40c090}
+.when-tag.before-going-out{background:#1e1200;border-color:#805000;color:#f0a030}
+.when-tag.before-bed{background:#181020;border-color:#402870;color:#9070d0}
+.when-tag.after-dinner{background:#1a1010;border-color:#602020;color:#e07060}
+.when-tag.anytime{background:#181820;border-color:#303060;color:#8090c0}
+[data-theme="light"] .when-tag.before-brush{background:#f5eaff;border-color:#c080f0;color:#7030a0}
+[data-theme="light"] .when-tag.after-brush{background:#eafaf8;border-color:#50c0a0;color:#107060}
+[data-theme="light"] .when-tag.before-bath{background:#eaf0ff;border-color:#6090e0;color:#204080}
+[data-theme="light"] .when-tag.after-bath{background:#eafaf4;border-color:#40b080;color:#106040}
+[data-theme="light"] .when-tag.before-going-out{background:#fff8ea;border-color:#d08020;color:#805010}
+[data-theme="light"] .when-tag.before-bed{background:#f0eaff;border-color:#9060d0;color:#502090}
+[data-theme="light"] .when-tag.after-dinner{background:#fff0ee;border-color:#e06050;color:#902020}
+[data-theme="light"] .when-tag.anytime{background:#eeeeff;border-color:#8090c0;color:#404080}
+
+/* sequence flow strip */
+.sequence-strip{display:flex;align-items:center;gap:4px;margin-top:6px;padding-top:6px;border-top:1px solid var(--border);flex-wrap:wrap}
+.seq-step{font-size:10px;color:var(--muted);display:flex;align-items:center;gap:3px}
+.seq-arrow{color:var(--border);font-size:10px}
+.seq-highlight{color:var(--accent);font-weight:600}
+
 /* ── ANALYTICS PAGE ── */
 .page-header{padding:20px 18px 12px;border-bottom:1px solid var(--border);background:var(--surface)}
 .page-title{font-family:'Playfair Display',serif;font-size:20px;color:var(--text)}
@@ -458,37 +483,150 @@ const dermaTips={
   5:`<em>Night is prime time.</em> Vitamin C is most stable without UV. <strong>Never skip moisturiser</strong> — water loss peaks overnight.`
 };
 
+// ── WHEN TAG CONFIG ──
+// whenClass maps to CSS class, icon is emoji, label is display text
+// sequence: short ordered steps showing where this fits in the day's flow
+
 const defaultRoutines={
   morning:[
-    {id:'m1',name:'Derma Co 2% Salicylic Acid Face Wash',instruction:`Wet face with <strong>lukewarm water</strong>. Apply coin-sized amount. Lather <strong>60 seconds</strong>, T-zone focus. Rinse cool. Pat dry — <strong>never rub</strong>.`,why:`SA dissolves sebum and dead cells inside pores. Morning cleanse removes overnight bacteria buildup.`,switchNote:`⚠️ ~15% remaining — switch to Minimalist SA+LHA when finished.`,timeSlot:1,type:'morning',time:'Morning'},
-    {id:'m2',name:'Dot & Key Cica Oil-Free Moisturizer',instruction:`Apply while face is <strong>slightly damp</strong> (within 60s of drying). 2 fingertip units. Press gently — <strong>do not drag</strong>. Focus on cheeks and forehead.`,why:`Cica calms inflammation and strengthens skin barrier. Oil-free formula won't clog pores.`,timeSlot:1,type:'morning',time:'Morning'},
-    {id:'m3',name:'Detan Dewy Sunscreen SPF 50+',instruction:`<strong>¼ teaspoon minimum</strong> for face alone. Spread evenly. Apply <strong>15 mins before sun exposure</strong>. Reapply every 2 hours outdoors.`,why:`UV is the #1 cause of pigmentation and premature aging. Without SPF, all other products work at 30% efficiency.`,timeSlot:1,type:'morning',time:'Morning'},
-    {id:'m4',name:'Nivea Men Fresh Active Deodorant',instruction:`Apply to <strong>clean, dry underarms</strong> only. Let dry before dressing. Wait 20 mins after shaving.`,why:`72h formula — applied correctly once in the morning, you're fully covered.`,timeSlot:1,type:'morning',time:'Morning'},
+    {id:'m1',name:'Derma Co 2% Salicylic Acid Face Wash',
+     instruction:`Wet face with <strong>lukewarm water</strong>. Apply coin-sized amount. Lather <strong>60 seconds</strong>, T-zone focus. Rinse cool. Pat dry — <strong>never rub</strong>.`,
+     why:`SA dissolves sebum and dead cells inside pores. Morning cleanse removes overnight bacteria buildup.`,
+     switchNote:`⚠️ ~15% remaining — switch to Minimalist SA+LHA when finished.`,
+     when:'After brushing teeth',whenClass:'after-brush',whenIcon:'🪥',
+     sequence:['Wake up','Brush teeth','→ Face wash ★','Moisturizer','Sunscreen','Go out'],
+     timeSlot:1,type:'morning',time:'Morning'},
+
+    {id:'m2',name:'Dot & Key Cica Oil-Free Moisturizer',
+     instruction:`Apply while face is <strong>slightly damp</strong> (within 60s of drying). 2 fingertip units. Press gently — <strong>do not drag</strong>. Focus on cheeks and forehead.`,
+     why:`Cica calms inflammation and strengthens skin barrier. Oil-free formula won't clog pores.`,
+     when:'After face wash, before sunscreen',whenClass:'after-brush',whenIcon:'✅',
+     sequence:['Face wash','→ Moisturizer ★','Sunscreen','Deodorant','Get dressed'],
+     timeSlot:1,type:'morning',time:'Morning'},
+
+    {id:'m3',name:'Detan Dewy Sunscreen SPF 50+',
+     instruction:`<strong>¼ teaspoon minimum</strong> for face alone. Spread evenly. Apply <strong>15 mins before stepping out</strong>. Reapply every 2 hours outdoors.`,
+     why:`UV is the #1 cause of pigmentation and premature aging. Without SPF, all other products work at 30% efficiency.`,
+     when:'Just before going out — last skincare step',whenClass:'before-going-out',whenIcon:'🌞',
+     sequence:['Moisturizer','Deodorant','Get dressed','→ Sunscreen ★','Step outside'],
+     timeSlot:1,type:'morning',time:'Morning'},
+
+    {id:'m4',name:'Nivea Men Fresh Active Deodorant',
+     instruction:`Apply to <strong>clean, dry underarms</strong> only after bath. Let dry before dressing. Wait 20 mins if shaved.`,
+     why:`72h formula — applied correctly once after bath, you're fully covered all day.`,
+     when:'After bath, before getting dressed',whenClass:'after-bath',whenIcon:'🚿',
+     sequence:['Finish bath','Towel dry','→ Deodorant ★','Get dressed','Sunscreen'],
+     timeSlot:1,type:'morning',time:'Morning'},
   ],
+
   body:[
-    {id:'b1',name:'Dermatouch Kojic Acid 1% Syndet Soap',instruction:`pH 5.5 — gentler than alkaline soap. Lather and <strong>leave 30–60 seconds</strong> before rinsing. Focus on neck, arms, and pigmented patches.`,why:`Kojic acid inhibits melanin production, targeting tan lines and uneven pigmentation.`,timeSlot:1,type:'body',time:'Shower'},
+    {id:'b1',name:'Dermatouch Kojic Acid 1% Syndet Soap',
+     instruction:`pH 5.5 — gentler than alkaline soap. Lather and <strong>leave 30–60 seconds</strong> before rinsing. Focus on neck, arms, and pigmented patches.`,
+     why:`Kojic acid inhibits melanin production, targeting tan lines and uneven pigmentation.`,
+     when:'During bath — use instead of regular soap',whenClass:'before-bath',whenIcon:'🛁',
+     sequence:['Start bath','Wet body','→ Kojic soap (leave 60s) ★','Rinse','Towel dry'],
+     timeSlot:1,type:'body',time:'During Bath'},
   ],
-  sanfe:{id:'b2',name:'Sanfe Instant Tan & Dead Skin Removal Gel',instruction:`<strong>Body only — never face</strong>. Circular motions 2–3 mins. Dead skin rolls off. Rinse. <strong>Max 3× per week.</strong>`,why:`Physical + chemical exfoliation removes dead skin and helps Kojic acid penetrate deeper.`,timeSlot:1,type:'body',time:'Shower'},
+
+  sanfe:{id:'b2',name:'Sanfe Instant Tan & Dead Skin Removal Gel',
+   instruction:`<strong>Body only — never face</strong>. Apply on damp skin after wetting in bath. Circular motions 2–3 mins. Dead skin rolls off. Rinse completely.`,
+   why:`Physical + chemical exfoliation removes dead skin and helps Kojic acid penetrate deeper.`,
+   when:'During bath — before Kojic soap',whenClass:'before-bath',whenIcon:'🧼',
+   sequence:['Start bath','Wet body','→ Sanfe exfoliate ★','Kojic soap (60s)','Rinse','Dry'],
+   timeSlot:1,type:'body',time:'During Bath'},
+
   night:[
-    {id:'n1',name:'Derma Co 2% Salicylic Acid Face Wash',instruction:`Evening cleanse is <strong>more important</strong> than morning. Lather <strong>90 seconds</strong> — removing SPF, pollution, sebum. Rinse cool to prep for serums.`,why:`Sleeping with SPF and pollution residue causes breakouts. Night cleansing opens the path for actives.`,switchNote:`⚠️ ~15% remaining — switch to Minimalist SA+LHA when finished.`,timeSlot:5,type:'night',time:'Night'},
-    {id:'n2',name:'Minimalist Vitamin C + Glow Serum',instruction:`On <strong>completely dry face</strong> — wait 2–3 mins after washing. 3–4 drops. Press in, don't rub. Focus on pigmented areas. <strong>Wait 3 minutes</strong> before moisturizer.`,why:`Vitamin C inhibits melanin and brightens spots. Night application avoids UV degradation — significantly more effective.`,timeSlot:5,type:'night',time:'Night'},
-    {id:'n3',name:'Dot & Key Cica Oil-Free Moisturizer',instruction:`<strong>Final step</strong> — seals in Vitamin C. Use slightly more than morning (skin loses more water at night). Press upward.`,why:`Occlusive layer prevents TEWL (transepidermal water loss) and locks in actives. Cica promotes overnight repair.`,timeSlot:5,type:'night',time:'Night'},
+    {id:'n1',name:'Derma Co 2% Salicylic Acid Face Wash',
+     instruction:`Evening cleanse is <strong>more important</strong> than morning. Lather <strong>90 seconds</strong> — removing SPF, pollution, sebum. Rinse cool to prep for serums.`,
+     why:`Sleeping with SPF and pollution residue causes breakouts. Night cleansing opens the path for actives.`,
+     switchNote:`⚠️ ~15% remaining — switch to Minimalist SA+LHA when finished.`,
+     when:'After dinner, before bed — first night step',whenClass:'after-dinner',whenIcon:'🍽️',
+     sequence:['Finish dinner','30 min rest','→ Face wash ★','Vitamin C serum','Moisturizer','Sleep'],
+     timeSlot:5,type:'night',time:'Night'},
+
+    {id:'n2',name:'Minimalist Vitamin C + Glow Serum',
+     instruction:`On <strong>completely dry face</strong> — wait 2–3 mins after washing. 3–4 drops. Press in, don't rub. Focus on pigmented areas. <strong>Wait 3 minutes</strong> before moisturizer.`,
+     why:`Vitamin C inhibits melanin and brightens spots. Night application avoids UV degradation — significantly more effective.`,
+     when:'After night face wash — before moisturizer',whenClass:'before-bed',whenIcon:'🌙',
+     sequence:['Night face wash','Wait 2–3 mins','→ Vit C serum ★','Wait 3 mins','Moisturizer','Sleep'],
+     timeSlot:5,type:'night',time:'Night'},
+
+    {id:'n3',name:'Dot & Key Cica Oil-Free Moisturizer',
+     instruction:`<strong>Very last step before sleeping</strong> — seals in Vitamin C. Use slightly more than morning. Press upward strokes. Sleep immediately after.`,
+     why:`Occlusive layer prevents TEWL overnight and locks in actives. Cica promotes deep skin repair during sleep.`,
+     when:'Last step before sleeping — seal everything in',whenClass:'before-bed',whenIcon:'😴',
+     sequence:['Vit C serum','Wait 3 mins','→ Moisturizer ★','Hit the pillow 🛏️'],
+     timeSlot:5,type:'night',time:'Night'},
   ],
+
   hair:{
     ketocip:{note:'Ketocip Wash Day (Mon & Thu) — Medical Antifungal Protocol',noteIcon:'💊',tasks:[
-      {id:'h1',name:'Apply Minimalist CPH + Oligopeptide Serum',instruction:`Part hair into sections. Dropper <strong>directly to scalp skin</strong>. Massage circles <strong>2–3 mins</strong>. Cover crown, temples, nape.`,why:`Climbazole + Piroctone Olamine need dwell time on scalp. Massage boosts microcirculation.`,timeSlot:1,type:'hair',time:'Pre-wash'},
-      {id:'h2',name:'Wait 1 Full Hour',instruction:`Set a timer. <strong>Do not wash off early.</strong> Do face routine during this wait.`,why:`Climbazole needs contact time to disrupt fungal membranes. Early rinse reduces efficacy 60%.`,timeSlot:1,type:'hair',time:'Pre-wash'},
-      {id:'h3',name:'Ketocip Ketoconazole 2% Shampoo',instruction:`Apply to wet scalp. Good lather. <strong>Leave 3–5 minutes</strong> — medically essential. Rinse thoroughly.`,why:`Ketoconazole 2% controls Malassezia fungus — primary cause of dandruff and scalp inflammation.`,timeSlot:1,type:'hair',time:'Wash'},
-      {id:'h4',name:'Plom Rosemary Redensyl Hair Growth Serum',instruction:`Towel dry to <strong>damp, not dripping</strong>. Sections, apply to scalp. Massage 2 mins. <strong>Leave-in — do NOT rinse.</strong>`,why:`Rosemary stimulates follicle blood flow. Redensyl activates dormant stem cells — addresses density and graying.`,timeSlot:1,type:'hair',time:'Post-wash'},
+      {id:'h1',name:'Apply Minimalist CPH + Oligopeptide Serum',
+       instruction:`Part hair into sections. Dropper <strong>directly to scalp skin</strong>. Massage circles <strong>2–3 mins</strong>. Cover crown, temples, nape.`,
+       why:`Climbazole + Piroctone Olamine need dwell time on scalp. Massage boosts microcirculation.`,
+       when:'1 hour before bath — do this first',whenClass:'before-bath',whenIcon:'⏱️',
+       sequence:['→ CPH serum ★','Wait 1 full hour','Then go to bath','Ketocip shampoo','Plom serum'],
+       timeSlot:1,type:'hair',time:'Pre-bath'},
+
+      {id:'h2',name:'Wait 1 Full Hour',
+       instruction:`Set a phone timer. <strong>Do not go to bath early.</strong> During this wait — do your morning face routine, brush teeth, have breakfast.`,
+       why:`Climbazole needs contact time to disrupt fungal cell membranes. Rinsing early reduces efficacy by 60%.`,
+       when:'Between CPH serum and bath — productive wait',whenClass:'before-bath',whenIcon:'⌛',
+       sequence:['CPH serum applied','→ Wait 60 mins ★ (do face routine now)','Then shower'],
+       timeSlot:1,type:'hair',time:'Before Bath'},
+
+      {id:'h3',name:'Ketocip Ketoconazole 2% Shampoo',
+       instruction:`Inside bath — apply to wet scalp. Good lather. <strong>Leave 3–5 minutes</strong>. Rinse thoroughly. Washes off CPH serum and Ketocip together.`,
+       why:`Ketoconazole 2% controls Malassezia fungus — primary cause of dandruff and scalp inflammation.`,
+       when:'During bath — after wetting hair',whenClass:'before-bath',whenIcon:'🚿',
+       sequence:['Wet hair in bath','→ Ketocip shampoo ★','Leave 5 mins','Rinse','Finish bath','Towel dry','Plom serum'],
+       timeSlot:1,type:'hair',time:'During Bath'},
+
+      {id:'h4',name:'Plom Rosemary Redensyl Hair Growth Serum',
+       instruction:`Immediately after bath — towel dry to <strong>damp, not dripping</strong>. Sections, apply serum to scalp. Massage 2 mins. <strong>Leave-in — do NOT rinse.</strong>`,
+       why:`Rosemary stimulates follicle blood flow. Redensyl activates dormant stem cells. Leave-in means it works all day.`,
+       when:'Right after bath — while hair is still damp',whenClass:'after-bath',whenIcon:'💧',
+       sequence:['Finish bath','Towel dry hair','→ Plom serum ★ (leave-in)','Style hair','Get dressed'],
+       timeSlot:1,type:'hair',time:'After Bath'},
     ]},
+
     regular:{note:'Regular Wash Day (Wed & Sat) — Maintenance Protocol',noteIcon:'🌿',tasks:[
-      {id:'h5',name:'Apply Minimalist CPH + Oligopeptide Serum',instruction:`Same as Ketocip days — part hair, dropper to scalp, massage circles <strong>2–3 mins</strong>.`,why:`3–4× per week coverage prevents fungal regrowth between Ketocip days.`,timeSlot:1,type:'hair',time:'Pre-wash'},
-      {id:'h6',name:'Wait 1 Full Hour',instruction:`Mandatory wait. Use time for face routine. <strong>Don't wet hair.</strong>`,why:`Non-negotiable dwell time for CPH actives.`,timeSlot:1,type:'hair',time:'Pre-wash'},
-      {id:'h7',name:'Mild / Regular Shampoo Rinse',instruction:`Gentle lather. Rinse CPH serum completely. <strong>No vigorous scrubbing.</strong>`,why:`Mild cleanse on non-Ketocip days. Overusing Ketocip causes resistance.`,timeSlot:1,type:'hair',time:'Wash'},
-      {id:'h8',name:'Plom Rosemary Redensyl Hair Growth Serum',instruction:`Damp scalp. Apply serum to scalp sections. Massage 2 mins. <strong>Leave-in.</strong>`,why:`Daily Rosemary + Redensyl gives compounding growth results.`,timeSlot:1,type:'hair',time:'Post-wash'},
+      {id:'h5',name:'Apply Minimalist CPH + Oligopeptide Serum',
+       instruction:`Same as Ketocip days — part hair, dropper to scalp, massage circles <strong>2–3 mins</strong>.`,
+       why:`3–4× per week coverage prevents fungal regrowth between Ketocip days.`,
+       when:'1 hour before bath — same as Ketocip days',whenClass:'before-bath',whenIcon:'⏱️',
+       sequence:['→ CPH serum ★','Wait 1 full hour','Then shower','Mild shampoo','Plom serum'],
+       timeSlot:1,type:'hair',time:'Pre-bath'},
+
+      {id:'h6',name:'Wait 1 Full Hour',
+       instruction:`Mandatory wait. <strong>Don't wet hair.</strong> Use this time for face routine, breakfast, or brushing teeth.`,
+       why:`Non-negotiable dwell time for CPH actives to work effectively.`,
+       when:'Between CPH serum and bath',whenClass:'before-bath',whenIcon:'⌛',
+       sequence:['CPH serum applied','→ Wait 60 mins ★','Then shower'],
+       timeSlot:1,type:'hair',time:'Before Bath'},
+
+      {id:'h7',name:'Mild / Regular Shampoo Rinse',
+       instruction:`Inside bath — gentle lather. Rinse off CPH serum completely. <strong>No vigorous scrubbing.</strong>`,
+       why:`Mild cleanse on non-Ketocip days. Overusing Ketocip causes antifungal resistance.`,
+       when:'During bath — gentle wash only',whenClass:'before-bath',whenIcon:'🚿',
+       sequence:['Wet hair','→ Mild shampoo ★','Rinse','Finish bath','Towel dry','Plom serum'],
+       timeSlot:1,type:'hair',time:'During Bath'},
+
+      {id:'h8',name:'Plom Rosemary Redensyl Hair Growth Serum',
+       instruction:`Right after bath — damp scalp. Apply serum to sections. Massage 2 mins. <strong>Leave-in.</strong>`,
+       why:`Daily Rosemary + Redensyl application gives compounding growth results over weeks.`,
+       when:'Right after bath — damp hair',whenClass:'after-bath',whenIcon:'💧',
+       sequence:['Finish bath','Towel dry','→ Plom serum ★ (leave-in)','Get dressed'],
+       timeSlot:1,type:'hair',time:'After Bath'},
     ]},
+
     nowash:{note:'No Hair Wash Today — Serum-Only Protocol',noteIcon:'✨',tasks:[
-      {id:'h9',name:'Plom Rosemary Redensyl Serum on Dry Scalp',instruction:`<strong>Dry scalp</strong> — part hair in sections. Dispense at roots. Massage circles <strong>2–3 mins</strong>. Leave-in.`,why:`On no-wash days, skip CPH (needs rinsing). Plom daily gives consistent follicle stimulation.`,timeSlot:1,type:'hair',time:'Morning/Evening'},
+      {id:'h9',name:'Plom Rosemary Redensyl Serum on Dry Scalp',
+       instruction:`<strong>Dry scalp only</strong> — no bath needed for this. Part hair in sections. Dispense at roots. Massage circles <strong>2–3 mins</strong>. Leave-in. Best done morning or evening.`,
+       why:`On no-wash days, skip CPH (it needs rinsing). Plom daily keeps follicle stimulation consistent.`,
+       when:'Anytime — morning after brushing or evening before bed',whenClass:'anytime',whenIcon:'🔄',
+       sequence:['After brushing teeth (morning)','→ Plom serum ★ on dry scalp','OR before bed → Plom serum ★'],
+       timeSlot:1,type:'hair',time:'Morning / Evening'},
     ]}
   }
 };
@@ -797,6 +935,21 @@ function renderContent(){
         <span class="stock-pct">${stock}%</span>
       </div>`;
 
+      // When tag
+      const whenHtml=task.when
+        ?`<span class="when-tag ${task.whenClass||'anytime'}">${task.whenIcon||'🕐'} ${task.when}</span>`:'';
+
+      // Sequence strip
+      const seqHtml=task.sequence
+        ?`<div class="sequence-strip">${task.sequence.map((s,i)=>{
+            const isHighlight=s.includes('★');
+            const clean=s.replace(' ★','');
+            const isArrow=s.startsWith('→');
+            if(isArrow&&isHighlight) return `<span class="seq-step seq-highlight">▶ ${clean.replace('→ ','')}</span>`;
+            if(i>0&&!s.startsWith('OR')) return `<span class="seq-arrow">›</span><span class="seq-step">${clean}</span>`;
+            return `<span class="seq-step">${clean}</span>`;
+          }).join('')}</div>`:'';
+
       taskEl.innerHTML=`
         <div class="check-circle">
           <svg class="check-svg" width="11" height="11" viewBox="0 0 12 12" fill="none">
@@ -810,7 +963,9 @@ function renderContent(){
           <div class="task-meta">
             <span class="task-time-badge${isActive?' active-time':''}">${task.time}</span>
             ${isActive?'<span class="now-chip">● Do this now</span>':''}
+            ${whenHtml}
           </div>
+          ${seqHtml}
           ${stockRow}
         </div>
         <div class="hold-ring-wrap"><svg width="26" height="26" viewBox="0 0 26 26"><circle class="hold-ring-bg" cx="13" cy="13" r="11"/><circle class="hold-ring-fill" cx="13" cy="13" r="11"/></svg></div>`;
