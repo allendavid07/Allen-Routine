@@ -3,10 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Allen's Routine">
-<title>Allen's Daily Routine</title>
+<title>Allen's Daily Routine — v20260730</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Playfair+Display:wght@600;700&display=swap');
 
@@ -299,7 +302,68 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 [data-theme="light"] .toast{background:#e8f5ee}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* ── PHOTO REMINDER BANNER ── */
+/* ── WATER TRACKER ── */
+.water-content{padding:16px 18px 20px}
+
+.water-hero{display:flex;flex-direction:column;align-items:center;margin-bottom:20px}
+
+.water-circle-wrap{position:relative;width:180px;height:180px;margin-bottom:14px}
+.water-ring{width:100%;height:100%;transform:rotate(-90deg)}
+.water-ring-bg{fill:none;stroke:var(--border);stroke-width:10}
+.water-ring-fill{fill:none;stroke:url(#waterGrad);stroke-width:10;stroke-linecap:round;stroke-dasharray:326.7;stroke-dashoffset:326.7;transition:stroke-dashoffset .6s cubic-bezier(.4,0,.2,1)}
+.water-circle-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.water-amount{font-family:'Playfair Display',serif;font-size:44px;color:var(--text);line-height:1;font-weight:700}
+.water-unit{font-size:13px;color:var(--muted);margin-top:2px}
+.water-ml{font-size:11px;color:var(--accent);margin-top:3px;font-weight:600}
+
+.water-derma-tip{background:var(--tip-bg);border:1px solid var(--tip-border);border-radius:10px;padding:9px 14px;font-size:12px;color:var(--tip-color);line-height:1.5;text-align:center;max-width:320px}
+
+/* glass grid */
+.water-glasses{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px}
+.water-glass{background:var(--card);border:2px solid var(--border);border-radius:12px;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;font-size:22px;position:relative;overflow:hidden;user-select:none}
+.water-glass::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,#60b8f020,#3090d040);opacity:0;transition:opacity .3s}
+.water-glass.filled{border-color:#60b8f0;background:#0e2030}
+.water-glass.filled::after{opacity:1}
+.water-glass.filled .glass-icon{filter:none}
+.water-glass .glass-icon{font-size:24px;position:relative;z-index:1}
+.water-glass .glass-num{font-size:9px;font-weight:700;color:var(--muted);position:relative;z-index:1;margin-top:2px}
+.water-glass.filled .glass-num{color:#60b8f0}
+[data-theme="light"] .water-glass.filled{background:#e0f0ff;border-color:#40a0e0}
+
+/* actions */
+.water-actions{display:flex;gap:8px;margin-bottom:16px}
+.water-add-btn{flex:1;background:linear-gradient(135deg,#1a3a5a,#0e2030);border:1px solid #2a5080;border-radius:12px;padding:13px 10px;color:#60c0f0;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;text-align:center;line-height:1.2}
+.water-add-btn span{display:block;font-size:10px;font-weight:400;color:#4090b0;margin-top:2px}
+.water-add-btn.half{background:linear-gradient(135deg,#1a2a3a,#0e1820);border-color:#204060;color:#4090c0}
+.water-add-btn:active{transform:scale(.97)}
+.water-undo-btn{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:13px 14px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.water-undo-btn:active{border-color:var(--warn);color:var(--warn)}
+[data-theme="light"] .water-add-btn{background:linear-gradient(135deg,#daeeff,#c0e0ff);border-color:#80c0f0;color:#1060a0}
+[data-theme="light"] .water-add-btn span{color:#4080b0}
+[data-theme="light"] .water-add-btn.half{background:linear-gradient(135deg,#e8f5ff,#d0eaff);border-color:#90c8f0;color:#2070b0}
+
+/* goal card */
+.water-goal-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px}
+.water-goal-title{font-family:'Playfair Display',serif;font-size:15px;color:var(--text);margin-bottom:10px}
+.water-goal-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.goal-adj-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:20px;font-weight:300;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.goal-adj-btn:active{background:var(--accent);color:#0c0e14;border-color:var(--accent)}
+.goal-display{text-align:center;font-size:16px;font-weight:600;color:var(--text)}
+
+/* weekly bars */
+.water-history-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px}
+.water-week-bars{display:flex;align-items:flex-end;gap:6px;height:80px}
+.water-bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.water-bar-fill{width:100%;border-radius:5px 5px 0 0;background:linear-gradient(180deg,#60c0f0,#2080c0);transition:height .5s cubic-bezier(.4,0,.2,1);min-height:3px}
+.water-bar-fill.goal-met{background:linear-gradient(180deg,#5dba8c,#3a8060)}
+.water-bar-label{font-size:9px;color:var(--muted)}
+.water-bar-pct{font-size:9px;color:var(--muted)}
+
+/* tips card */
+.water-tips-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:8px}
+.water-tip-item{font-size:12px;color:var(--muted);line-height:1.5;padding:6px 0;border-bottom:1px solid var(--border)}
+.water-tip-item:last-child{border:none;padding-bottom:0}
+.water-tip-item strong{color:var(--text)}
 .photo-reminder{background:linear-gradient(135deg,#1a1430,#120e20);border:1px solid #5040a0;border-radius:14px;padding:14px 16px;margin-bottom:14px;display:none}
 .photo-reminder.show{display:block}
 .photo-reminder-title{font-size:13px;font-weight:600;color:#b090f0;margin-bottom:6px;display:flex;align-items:center;gap:7px}
@@ -393,6 +457,16 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 
 <canvas id="confetti-canvas"></canvas>
 
+<!-- SVG gradient for water ring -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="waterGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#60c0f0"/>
+      <stop offset="100%" style="stop-color:#3090d0"/>
+    </linearGradient>
+  </defs>
+</svg>
+
 <!-- NOTIFICATION PROMPT -->
 <div class="notif-bar" id="notifBar">
   <span>🔔 Enable reminders for morning (7 AM) and night (9 PM) routines?</span>
@@ -420,7 +494,14 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
     </div>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
       <div class="streak-pill" id="streakPill">🔥 0 day streak</div>
-      <div style="font-size:11px;color:var(--muted)" id="personalBest"></div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div id="personalBest" style="font-size:11px;color:var(--muted)"></div>
+        <div onclick="switchPage('water')" style="display:flex;align-items:center;gap:4px;background:var(--card);border:1px solid #2a5080;border-radius:20px;padding:4px 10px;cursor:pointer">
+          <span style="font-size:12px">💧</span>
+          <span id="headerWaterCount" style="font-size:12px;font-weight:700;color:#60c0f0">0</span>
+          <span style="font-size:10px;color:var(--muted)">/<span id="headerWaterGoal">8</span></span>
+        </div>
+      </div>
     </div>
     <div class="derma-tip"><span style="font-size:14px;flex-shrink:0;margin-top:1px">🩺</span><span id="dermaTipText">Loading tip...</span></div>
     <div class="progress-row">
@@ -524,6 +605,70 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
   <div class="inv-content" id="invContent"></div>
 </div>
 
+<!-- ══════════ PAGE: WATER ══════════ -->
+<div class="page" id="page-water">
+  <div class="page-header">
+    <div class="page-title">Water Tracker 💧</div>
+    <div class="page-sub">Hydration directly affects your skin quality</div>
+  </div>
+  <div class="water-content">
+
+    <!-- Main tracker -->
+    <div class="water-hero">
+      <div class="water-circle-wrap">
+        <svg class="water-ring" viewBox="0 0 120 120">
+          <circle class="water-ring-bg" cx="60" cy="60" r="52"/>
+          <circle class="water-ring-fill" id="waterRingFill" cx="60" cy="60" r="52"/>
+        </svg>
+        <div class="water-circle-inner">
+          <div class="water-amount" id="waterAmount">0</div>
+          <div class="water-unit">/ <span id="waterGoal">8</span> glasses</div>
+          <div class="water-ml" id="waterMl">0 ml</div>
+        </div>
+      </div>
+      <div class="water-derma-tip" id="waterDermaTip">💡 Water flushes toxins and keeps skin cells plump. Every glass shows on your face within hours.</div>
+    </div>
+
+    <!-- Glass buttons -->
+    <div class="water-glasses" id="waterGlasses"></div>
+
+    <!-- Quick add -->
+    <div class="water-actions">
+      <button class="water-add-btn" onclick="addWater(1)">+ 1 Glass <span>250ml</span></button>
+      <button class="water-add-btn half" onclick="addWater(0.5)">+ ½ Glass <span>125ml</span></button>
+      <button class="water-undo-btn" onclick="undoWater()" id="waterUndoBtn">↩ Undo</button>
+    </div>
+
+    <!-- Goal setting -->
+    <div class="water-goal-card">
+      <div class="water-goal-title">Daily Goal</div>
+      <div class="water-goal-row">
+        <button class="goal-adj-btn" onclick="adjustGoal(-1)">−</button>
+        <div class="goal-display"><span id="goalDisplay">8</span> glasses <span style="color:var(--muted);font-size:11px">= <span id="goalMlDisplay">2000</span>ml</span></div>
+        <button class="goal-adj-btn" onclick="adjustGoal(1)">+</button>
+      </div>
+      <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:6px">Dermatologists recommend 8–10 glasses (2–2.5L) daily for clear skin</div>
+    </div>
+
+    <!-- Weekly history -->
+    <div class="water-history-card">
+      <div class="water-goal-title" style="margin-bottom:12px">This Week</div>
+      <div class="water-week-bars" id="waterWeekBars"></div>
+    </div>
+
+    <!-- Skin hydration tips -->
+    <div class="water-tips-card">
+      <div class="water-goal-title" style="margin-bottom:10px">🩺 Why Water Matters for Your Skin</div>
+      <div class="water-tip-item">💧 <strong>Reduces oiliness</strong> — dehydrated skin overproduces sebum to compensate</div>
+      <div class="water-tip-item">✨ <strong>Brightens skin tone</strong> — flushes the toxins causing dullness and pigmentation</div>
+      <div class="water-tip-item">🔵 <strong>Reduces under-eye puffiness</strong> — visible on your face within 24 hours</div>
+      <div class="water-tip-item">💊 <strong>Boosts serum absorption</strong> — hydrated skin absorbs your Vitamin C serum up to 40% better</div>
+      <div class="water-tip-item">🧴 <strong>Prevents dry patches</strong> — even with an oil-free moisturizer, internal hydration is essential</div>
+    </div>
+
+  </div>
+</div>
+
 <!-- NAV BAR -->
 <div class="nav-bar">
   <div class="nav-item active" id="nav-routine" onclick="switchPage('routine')">
@@ -541,6 +686,10 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
   <div class="nav-item" id="nav-inventory" onclick="switchPage('inventory')">
     <svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
     Inventory
+  </div>
+  <div class="nav-item" id="nav-water" onclick="switchPage('water')">
+    <svg viewBox="0 0 24 24"><path d="M12 2C6 8 4 13 4 16a8 8 0 0016 0c0-3-2-8-8-14z"/></svg>
+    Water
   </div>
 </div>
 
@@ -585,35 +734,41 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
   <div class="scan-sheet">
     <div class="scan-handle"></div>
     <div class="scan-title">Add Product 📦</div>
-    <div class="scan-sub">Take a photo of the label for auto-fill, or skip and type manually.</div>
+    <div class="scan-sub">Type the product name — AI will look it up and fill in all details automatically.</div>
 
-    <div class="capture-area" id="captureArea" onclick="document.getElementById('productPhotoInput').click()">
-      <div class="capture-placeholder" id="capturePlaceholder">
-        <div class="capture-icon">📷</div>
-        <div class="capture-label">Tap to take product photo</div>
-        <div class="capture-sub">optional — for auto-fill & inventory thumbnail</div>
-      </div>
-      <img id="capturedProductImg" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0"/>
-      <button class="capture-overlay-btn" id="retakeBtn" style="display:none" onclick="retakePhoto(event)">↺ Retake</button>
+    <!-- Name field FIRST — this is what AI uses -->
+    <div class="scan-field" style="margin-bottom:10px">
+      <label class="scan-field-label">Product Name *</label>
+      <input class="scan-field-val" id="scanName" placeholder="e.g. Minimalist 2% SA+LHA Cleanser" autocomplete="off"
+        oninput="document.getElementById('scanAnalyseBtn').style.display=this.value.trim()?'block':'none'"/>
     </div>
-    <input type="file" id="productPhotoInput" accept="image/*" capture="environment" style="display:none" onchange="onProductPhotoCapture(event)">
 
     <div style="display:flex;gap:8px;margin-bottom:14px">
-      <button id="scanAnalyseBtn" onclick="analyseScanPhoto()" style="display:none;flex:1;background:var(--accent);color:#0c0e14;border:none;border-radius:10px;padding:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer">🔍 Read Label with AI</button>
-      <button onclick="showManualEntry()" style="flex:1;background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:10px;padding:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer">✏️ Enter Manually</button>
+      <button id="scanAnalyseBtn" onclick="analyseScanPhoto()" style="display:none;flex:1;background:var(--accent);color:#0c0e14;border:none;border-radius:10px;padding:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer">🤖 AI Lookup Details</button>
+      <button onclick="showManualEntry()" style="flex:1;background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:10px;padding:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer">✏️ Fill Manually</button>
     </div>
 
     <div class="scan-ai-row" id="scanAiRow">
       <div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div>
-      <span class="ai-label">Reading product label...</span>
+      <span class="ai-label">Looking up product details...</span>
+    </div>
+
+    <!-- Photo — optional, for thumbnail only -->
+    <div style="margin-bottom:12px">
+      <label class="scan-field-label">Product Photo <span style="font-weight:400;text-transform:none">(optional — for inventory thumbnail)</span></label>
+      <div class="capture-area" id="captureArea" style="aspect-ratio:3/1;margin-bottom:0" onclick="document.getElementById('productPhotoInput').click()">
+        <div class="capture-placeholder" id="capturePlaceholder">
+          <div class="capture-icon" style="font-size:24px">📷</div>
+          <div class="capture-label" style="font-size:12px">Tap to add product photo</div>
+        </div>
+        <img id="capturedProductImg" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0"/>
+        <button class="capture-overlay-btn" id="retakeBtn" style="display:none" onclick="retakePhoto(event)">↺ Retake</button>
+      </div>
+      <input type="file" id="productPhotoInput" accept="image/*" capture="environment" style="display:none" onchange="onProductPhotoCapture(event)">
     </div>
 
     <div class="scan-result" id="scanResult">
-      <div class="scan-result-label" id="scanResultLabel">✨ Fill in product details</div>
-      <div class="scan-field">
-        <label class="scan-field-label">Product Name *</label>
-        <input class="scan-field-val" id="scanName" placeholder="e.g. Minimalist 2% SA+LHA Cleanser"/>
-      </div>
+      <div class="scan-result-label" id="scanResultLabel">✨ AI filled — edit if needed</div>
       <div class="scan-field">
         <label class="scan-field-label">Key Ingredients / Details</label>
         <input class="scan-field-val" id="scanIngredients" placeholder="e.g. Salicylic acid 2%, LHA, Zinc"/>
@@ -724,25 +879,32 @@ const defaultRoutines={
 
   night:[
     {id:'n1',name:'Derma Co 2% Salicylic Acid Face Wash',
-     instruction:`Evening cleanse is <strong>more important</strong> than morning. Lather <strong>90 seconds</strong> — removing SPF, pollution, sebum. Rinse cool to prep for serums.`,
+     instruction:`Evening cleanse is <strong>more important</strong> than morning. Lather <strong>90 seconds</strong> — removing SPF, pollution, sebum. Rinse cool to prep for actives.`,
      why:`Sleeping with SPF and pollution residue causes breakouts. Night cleansing opens the path for actives.`,
      switchNote:`⚠️ ~15% remaining — switch to Minimalist SA+LHA when finished.`,
      when:'After dinner, before bed — first night step',whenClass:'after-dinner',whenIcon:'🍽️',
-     sequence:['Finish dinner','30 min rest','→ Face wash ★','Vitamin C serum','Moisturizer','Sleep'],
+     sequence:['Finish dinner','30 min rest','→ Face wash ★','Active serum','Moisturizer','Sleep'],
      timeSlot:5,type:'night',time:'Night'},
 
     {id:'n2',name:'Minimalist Vitamin C + Glow Serum',
-     instruction:`On <strong>completely dry face</strong> — wait 2–3 mins after washing. 3–4 drops. Press in, don't rub. Focus on pigmented areas. <strong>Wait 3 minutes</strong> before moisturizer.`,
-     why:`Vitamin C inhibits melanin and brightens spots. Night application avoids UV degradation — significantly more effective.`,
-     when:'After night face wash — before moisturizer',whenClass:'before-bed',whenIcon:'🌙',
-     sequence:['Night face wash','Wait 2–3 mins','→ Vit C serum ★','Wait 3 mins','Moisturizer','Sleep'],
+     instruction:`On <strong>completely dry face</strong> — wait 2–3 mins after washing. 3–4 drops. Press in, don't rub. Focus on pigmented areas. <strong>Wait 3 minutes</strong> before moisturizer. Use on <strong>Tue / Thu / Sat / Sun nights only.</strong>`,
+     why:`Vitamin C inhibits melanin and brightens spots. Night application avoids UV degradation — significantly more effective. Alternated with Kojic Cream to avoid over-exfoliation.`,
+     when:'After night face wash — Tue/Thu/Sat/Sun nights',whenClass:'before-bed',whenIcon:'🌙',
+     sequence:['Night face wash','Wait 2–3 mins','→ Vit C serum ★ (Tue/Thu/Sat/Sun)','Wait 3 mins','Moisturizer','Sleep'],
+     timeSlot:5,type:'night',time:'Night'},
+
+    {id:'n4',name:'Derma Co 2% Kojic Acid Face Cream',
+     instruction:`On <strong>dry face</strong> after cleansing — wait 2 mins. Apply a <strong>pea-sized amount</strong> only. Spread evenly across face avoiding eye area. <strong>Do not layer with Vitamin C</strong> on the same night — use one or the other. Use on <strong>Mon / Wed / Fri nights only.</strong>`,
+     why:`2% Kojic Acid + Glycolic Acid + Vit C triple-action directly targets your pigmentation and uneven skin tone. Glycolic acid exfoliates surface dead cells, helping Kojic penetrate deeper. Alternating with Vit C serum prevents acid overload and barrier damage.`,
+     when:'After night face wash — Mon/Wed/Fri nights only',whenClass:'before-bed',whenIcon:'🟣',
+     sequence:['Night face wash','Wait 2 mins','→ Kojic Cream ★ (Mon/Wed/Fri)','Wait 3 mins','Moisturizer','Sleep'],
      timeSlot:5,type:'night',time:'Night'},
 
     {id:'n3',name:'Dot & Key Cica Oil-Free Moisturizer',
-     instruction:`<strong>Very last step before sleeping</strong> — seals in Vitamin C. Use slightly more than morning. Press upward strokes. Sleep immediately after.`,
-     why:`Occlusive layer prevents TEWL overnight and locks in actives. Cica promotes deep skin repair during sleep.`,
-     when:'Last step before sleeping — seal everything in',whenClass:'before-bed',whenIcon:'😴',
-     sequence:['Vit C serum','Wait 3 mins','→ Moisturizer ★','Hit the pillow 🛏️'],
+     instruction:`<strong>Very last step before sleeping</strong> — seals in all actives. Use slightly more than morning. Press upward strokes. Sleep immediately after.`,
+     why:`Occlusive layer prevents TEWL overnight and locks in actives beneath. Cica calms any potential irritation from Kojic or Vit C and promotes deep skin repair.`,
+     when:'Last step before sleeping — every night',whenClass:'before-bed',whenIcon:'😴',
+     sequence:['Active serum (Vit C or Kojic)','Wait 3 mins','→ Moisturizer ★','Hit the pillow 🛏️'],
      timeSlot:5,type:'night',time:'Night'},
   ],
 
@@ -831,6 +993,7 @@ const allProducts=[
   {id:'b2',name:'Sanfe Exfoliating Gel',category:'Body'},
   {id:'n1',name:'Derma Co 2% SA Face Wash (Night)',category:'Face'},
   {id:'n2',name:'Minimalist Vitamin C Serum',category:'Face'},
+  {id:'n4',name:'Derma Co 2% Kojic Acid Face Cream',category:'Face'},
   {id:'h1',name:'Minimalist CPH Scalp Serum',category:'Hair'},
   {id:'h3',name:'Ketocip Ketoconazole Shampoo',category:'Hair'},
   {id:'h4',name:'Plom Rosemary Redensyl Serum',category:'Hair'},
@@ -852,7 +1015,9 @@ function saveOverrides(o){ss('allen_overrides_v3',o);}
 
 function loadInventory(){
   const def={};
-  allProducts.forEach(p=>{def[p.id]=p.id==='m1'||p.id==='n1'?15:100;});
+  allProducts.forEach(p=>{
+    def[p.id]=p.id==='m1'||p.id==='n1'?15:p.id==='n4'?100:100;
+  });
   return sg('allen_inventory_v2',def);
 }
 function saveInventory(inv){ss('allen_inventory_v2',inv);}
@@ -981,12 +1146,13 @@ function openScanModal(context=null){
   document.getElementById('scanAiRow').classList.remove('show');
   document.getElementById('scanSaveBtn').style.display='none';
   document.getElementById('scanAnalyseBtn').style.display='none';
-  document.getElementById('scanResultLabel').textContent='✨ AI Detected — edit if needed';
+  document.getElementById('scanResultLabel').textContent='✨ AI filled — edit if needed';
   document.getElementById('scanName').value='';
   document.getElementById('scanIngredients').value='';
   document.getElementById('scanSize').value='';
   document.querySelectorAll('.cat-btn').forEach((b,i)=>b.classList.toggle('selected',i===0));
   document.getElementById('scanOverlay').classList.add('show');
+  setTimeout(()=>document.getElementById('scanName').focus(),400);
 }
 function closeScanModal(){document.getElementById('scanOverlay').classList.remove('show');scanContext=null;}
 
@@ -1041,14 +1207,25 @@ function selectScanCat(cat){
 const LINKED_IDS={
   'm1':['m1','n1'],
   'n1':['m1','n1'],
+  'n4':['n4'], // Kojic cream — standalone
 };
 
 async function analyseScanPhoto(){
-  if(!capturedProductB64){showToast('⚠ Take a photo first');return;}
+  // Image vision via artifact proxy is not supported.
+  // Instead: use the product name the user has typed (or prompt them to type it)
+  // and use text-only AI to fill in ingredients, category, usage instructions.
+  const nameVal=document.getElementById('scanName').value.trim();
+  if(!nameVal){
+    showToast('⚠ Type the product name first, then tap Lookup');
+    document.getElementById('scanName').focus();
+    document.getElementById('scanResult').classList.add('show');
+    document.getElementById('scanSaveBtn').style.display='none';
+    document.getElementById('scanResultLabel').textContent='✏️ Type name, then tap Lookup';
+    return;
+  }
+
   document.getElementById('scanAiRow').classList.add('show');
   document.getElementById('scanAnalyseBtn').style.display='none';
-  document.getElementById('scanResult').classList.remove('show');
-  document.getElementById('scanSaveBtn').style.display='none';
 
   try{
     const resp=await fetch('https://api.anthropic.com/v1/messages',{
@@ -1056,43 +1233,39 @@ async function analyseScanPhoto(){
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         model:'claude-sonnet-4-6',
-        max_tokens:500,
-        messages:[{role:'user',content:[
-          {type:'image',source:{type:'base64',media_type:'image/jpeg',data:capturedProductB64}},
-          {type:'text',text:`Look at this skincare or haircare product image. Read the label and extract details.
-Respond with ONLY a raw JSON object — no markdown, no backticks, no explanation before or after:
-{"name":"product name","ingredients":"key actives comma separated","size":"volume e.g. 100ml","category":"Face or Hair or Body","brand":"brand name"}
-Use empty string "" for any field not visible.`}
-        ]}]
+        max_tokens:400,
+        messages:[{role:'user',content:`You are a skincare and haircare product expert. The user has a product called: "${nameVal}".
+
+Look up this product and respond ONLY with a raw JSON object, no markdown, no backticks:
+{"name":"full official product name","ingredients":"key active ingredients comma separated","size":"typical size e.g. 100ml or 30g","category":"Face or Hair or Body","usage":"one sentence on how and when to use it","concern":"what skin or hair concern it targets"}
+
+If you don't recognise the product, fill what you can from the name and use empty string for unknowns.`}]
       })
     });
 
-    if(!resp.ok){throw new Error(`HTTP ${resp.status}`);}
+    if(!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const d=await resp.json();
-    if(d.error){throw new Error(d.error.message||'API error');}
+    if(d.error) throw new Error(d.error.message||'API error');
 
     const raw=(d.content||[]).map(b=>b.type==='text'?b.text:'').join('').trim();
-    // Aggressively clean any markdown wrapping
     const clean=raw.replace(/^[\s\S]*?(\{)/,'$1').replace(/(\})[^}]*$/,'$1');
     const result=JSON.parse(clean);
 
-    document.getElementById('scanName').value=result.name||'';
+    document.getElementById('scanName').value=result.name||nameVal;
     document.getElementById('scanIngredients').value=result.ingredients||'';
     document.getElementById('scanSize').value=result.size||'';
-    if(result.category)selectScanCat(result.category);
+    if(result.category) selectScanCat(result.category);
+    document.getElementById('scanResultLabel').textContent='✨ AI filled details — edit if needed';
     document.getElementById('scanResult').classList.add('show');
     document.getElementById('scanSaveBtn').style.display='block';
-    showToast('✓ Label read — check and confirm details');
+    showToast('✓ Product details filled — check and save');
 
   }catch(err){
-    console.error('Scan error:',err.message);
-    // Show manual form — user can fill in details themselves
-    document.getElementById('scanName').value='';
-    document.getElementById('scanIngredients').value='';
-    document.getElementById('scanSize').value='';
+    console.error('Lookup error:',err.message);
+    document.getElementById('scanResultLabel').textContent='✏️ Fill in details manually';
     document.getElementById('scanResult').classList.add('show');
     document.getElementById('scanSaveBtn').style.display='block';
-    showToast('⚠ Could not read label — please fill in manually');
+    showToast('⚠ AI lookup failed — fill in manually');
   }
   document.getElementById('scanAiRow').classList.remove('show');
 }
@@ -1269,6 +1442,11 @@ function updateClock(){
   document.getElementById('clockDate').textContent=now.toLocaleDateString('en-IN',{day:'numeric',month:'short'});
   document.getElementById('greetingText').innerHTML=`${getGreeting(h)} <span>Allen</span>`;
   document.getElementById('dermaTipText').innerHTML=dermaTips[getTimeSlot(h)];
+  // Refresh header water widget
+  const wd=loadWaterData(getTodayWaterDs());
+  const wg=loadWaterGoal();
+  document.getElementById('headerWaterCount').textContent=wd.glasses||0;
+  document.getElementById('headerWaterGoal').textContent=wg;
 }
 
 // ════════════════════════════════════════════
@@ -1282,6 +1460,7 @@ function switchPage(name){
   if(name==='analytics')renderAnalytics();
   if(name==='inventory')renderInventory();
   if(name==='journal'){renderJournalHistory();checkPhotoReminder();}
+  if(name==='water')renderWaterPage();
 }
 
 // ════════════════════════════════════════════
@@ -1370,9 +1549,21 @@ function buildSteps(di){
   }
 
   // ── PHASE 8: NIGHT ROUTINE ──
+  // Kojic Cream: Mon(1), Wed(3), Fri(5) — Vit C: Tue(2), Thu(4), Sat(6), Sun(0)
+  const kojicNights=[1,3,5];
+  const isKojicNight=kojicNights.includes(di);
+  const nightTasks=defaultRoutines.night.map(getTask).filter(t=>{
+    if(t.id==='n2'&&isKojicNight) return false;  // hide Vit C on Kojic nights
+    if(t.id==='n4'&&!isKojicNight) return false; // hide Kojic on Vit C nights
+    return true;
+  });
   phases.push({
-    icon:'🌙', label:'Night Routine', sublabel:'After dinner, before bed',
-    dotClass:'d-night', tasks:defaultRoutines.night.map(getTask)
+    icon:'🌙', label:'Night Routine', sublabel:isKojicNight?'Mon/Wed/Fri — Kojic Acid night':'Tue/Thu/Sat/Sun — Vitamin C night',
+    dotClass:'d-night',
+    nightBadge:isKojicNight
+      ?{text:'🟣 Kojic Acid Night',color:'#a47cf5',bg:'#1a0f2a',border:'#4a2080'}
+      :{text:'🌙 Vitamin C Night',color:'#7c9ef5',bg:'#0f1a2a',border:'#2a4080'},
+    tasks:nightTasks
   });
 
   // Remove empty phases
@@ -1462,6 +1653,14 @@ function renderContent(){
     const lbl=document.createElement('div');lbl.className='section-label';
     lbl.innerHTML=`<span class="sect-dot ${sec.dotClass}"></span><span style="font-size:13px;margin-right:1px">${sec.icon}</span> ${sec.label} <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted);font-size:10px;margin-left:4px">— ${sec.sublabel}</span>`;
     secEl.appendChild(lbl);
+
+    // Night type badge
+    if(sec.nightBadge){
+      const nb=document.createElement('div');
+      nb.style.cssText=`background:${sec.nightBadge.bg};border:1px solid ${sec.nightBadge.border};border-radius:10px;padding:8px 13px;margin-bottom:8px;font-size:12px;color:${sec.nightBadge.color};font-weight:600;display:flex;align-items:center;gap:7px`;
+      nb.innerHTML=`${sec.nightBadge.text} <span style="font-weight:400;color:var(--muted)">— active for tonight</span>`;
+      secEl.appendChild(nb);
+    }
 
     if(sec.noteIcon&&sec.note){
       const hn=document.createElement('div');hn.className='info-box hair-info';
@@ -2057,8 +2256,136 @@ function updateStock(slider){
 }
 
 // ════════════════════════════════════════════
-// TOAST
+// WATER TRACKER
 // ════════════════════════════════════════════
+const GLASS_ML=250;
+const WATER_TIPS_BY_AMOUNT=[
+  {min:0,  max:2, tip:'🚨 Critically low hydration — your skin is already compensating with extra oil. Drink now!'},
+  {min:2,  max:4, tip:'⚠️ Still below half goal — dehydrated skin absorbs serums poorly. Keep going!'},
+  {min:4,  max:6, tip:'👍 Halfway there! You\'ll start noticing less oiliness and more even skin tone soon.'},
+  {min:6,  max:8, tip:'💪 Almost at goal! Well-hydrated skin absorbs your Vitamin C serum up to 40% better.'},
+  {min:8,  max:99,tip:'🌟 Goal reached! Optimal hydration for skin repair, reduced puffiness, and serum absorption.'},
+];
+
+function waterStorageKey(ds){return `allen_water_${ds}`;}
+function loadWaterData(ds){return sg(waterStorageKey(ds),{glasses:0,goal:8,log:[]});}
+function saveWaterData(ds,data){ss(waterStorageKey(ds),data);}
+function loadWaterGoal(){return parseInt(sk('allen_water_goal')||'8');}
+function saveWaterGoal(g){ss('allen_water_goal',String(g));}
+
+function getTodayWaterDs(){return new Date().toISOString().split('T')[0];}
+
+function addWater(amount){
+  const ds=getTodayWaterDs();
+  const data=loadWaterData(ds);
+  const goal=loadWaterGoal();
+  data.glasses=Math.min(data.glasses+amount, goal+4); // allow going over goal slightly
+  data.goal=goal;
+  data.log=data.log||[];
+  data.log.push({amount,ts:Date.now()});
+  saveWaterData(ds,data);
+  renderWaterPage();
+  // Milestone toasts
+  const g=data.glasses;
+  if(g>=goal&&g-amount<goal) {showToast('🎉 Water goal reached! Great job!');launchConfetti();}
+  else if(Math.floor(g)>Math.floor(g-amount)) showToast(`💧 ${Math.round(g*GLASS_ML)}ml down!`);
+}
+
+function undoWater(){
+  const ds=getTodayWaterDs();
+  const data=loadWaterData(ds);
+  if(!data.log||!data.log.length){showToast('Nothing to undo');return;}
+  const last=data.log.pop();
+  data.glasses=Math.max(0,data.glasses-last.amount);
+  saveWaterData(ds,data);
+  renderWaterPage();
+  showToast('↩ Undone');
+}
+
+function adjustGoal(delta){
+  const goal=Math.min(20,Math.max(4,loadWaterGoal()+delta));
+  saveWaterGoal(goal);
+  renderWaterPage();
+}
+
+function renderWaterPage(){
+  const ds=getTodayWaterDs();
+  const goal=loadWaterGoal();
+  const data=loadWaterData(ds);
+  const glasses=data.glasses||0;
+  const pct=Math.min(glasses/goal,1);
+  const ml=Math.round(glasses*GLASS_ML);
+
+  // Ring
+  const circumference=326.7;
+  const offset=circumference*(1-pct);
+  document.getElementById('waterRingFill').style.strokeDashoffset=offset;
+
+  // Numbers
+  document.getElementById('waterAmount').textContent=glasses%1===0?glasses:glasses.toFixed(1);
+  document.getElementById('waterGoal').textContent=goal;
+  document.getElementById('waterMl').textContent=`${ml}ml of ${goal*GLASS_ML}ml`;
+  document.getElementById('goalDisplay').textContent=goal;
+  document.getElementById('goalMlDisplay').textContent=goal*GLASS_ML;
+
+  // Derma tip
+  const tip=WATER_TIPS_BY_AMOUNT.find(t=>glasses>=t.min&&glasses<t.max)||WATER_TIPS_BY_AMOUNT[WATER_TIPS_BY_AMOUNT.length-1];
+  document.getElementById('waterDermaTip').textContent=tip.tip;
+
+  // Glass grid
+  const grid=document.getElementById('waterGlasses');
+  grid.innerHTML='';
+  const totalSlots=Math.max(goal,Math.ceil(glasses));
+  for(let i=0;i<totalSlots;i++){
+    const filled=i<glasses;
+    const half=!filled&&i<glasses+0.5&&glasses%1!==0;
+    const div=document.createElement('div');
+    div.className=`water-glass${filled?' filled':''}`;
+    div.innerHTML=`<div class="glass-icon">${filled?'💧':half?'🫧':'🥛'}</div><div class="glass-num">${i+1}</div>`;
+    div.onclick=()=>{
+      // tap a glass to set exact amount
+      const newVal=i+1;
+      const d=loadWaterData(ds);
+      const old=d.glasses;
+      d.glasses=newVal;
+      d.log=d.log||[];
+      d.log.push({amount:newVal-old,ts:Date.now()});
+      saveWaterData(ds,d);
+      renderWaterPage();
+    };
+    grid.appendChild(div);
+  }
+
+  // Weekly bars
+  renderWaterWeekBars(goal);
+
+  // Undo button state
+  const log=data.log||[];
+  document.getElementById('waterUndoBtn').style.opacity=log.length?'1':'0.4';
+}
+
+function renderWaterWeekBars(goal){
+  const container=document.getElementById('waterWeekBars');
+  container.innerHTML='';
+  const today=new Date();
+
+  for(let i=6;i>=0;i--){
+    const d=new Date(today);d.setDate(today.getDate()-i);
+    const ds=d.toISOString().split('T')[0];
+    const data=loadWaterData(ds);
+    const glasses=data.glasses||0;
+    const pct=Math.min(glasses/goal,1);
+    const isToday=i===0;
+    const goalMet=glasses>=goal;
+
+    const col=document.createElement('div');col.className='water-bar-col';
+    col.innerHTML=`
+      <div class="water-bar-fill${goalMet?' goal-met':''}" style="height:${Math.max(pct*64,3)}px"></div>
+      <div class="water-bar-label">${SHORT[d.getDay()]}</div>
+      <div class="water-bar-pct" style="${isToday?'color:var(--accent);font-weight:700':''}">${glasses>0?Math.round(glasses*GLASS_ML/10)/100+'L':'—'}</div>`;
+    container.appendChild(col);
+  }
+}
 function showToast(msg){
   const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),3000);
