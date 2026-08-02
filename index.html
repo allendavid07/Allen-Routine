@@ -832,7 +832,8 @@ const dermaTips={
 const defaultRoutines={
   morning:[
     {id:'m1',name:'Derma Co 2% Salicylic Acid Face Wash',
-     instruction:`Wet face with <strong>lukewarm water</strong>. Apply coin-sized amount. Lather <strong>60 seconds</strong>, T-zone focus. Rinse cool. Pat dry — <strong>never rub</strong>.`,
+     instruction:`Wet face with <strong>lukewarm water</strong>. Pump <strong>1 full pump (≈ 2ml, coin-sized)</strong> onto palm. Lather and massage for <strong>60 seconds</strong> focusing on T-zone. Rinse cool. Pat dry — <strong>never rub</strong>.`,
+     qty:`<strong>📏 Quantity:</strong> 1 pump = ≈2ml. More strips your barrier; less won't activate SA. At 2 uses/day, the 100ml tube lasts ~50 days.`,
      why:`SA dissolves sebum and dead cells inside pores. Morning cleanse removes overnight bacteria buildup.`,
      switchNote:`⚠️ ~15% remaining — switch to Minimalist SA+LHA when finished.`,
      when:'After brushing teeth',whenClass:'after-brush',whenIcon:'🪥',
@@ -840,21 +841,24 @@ const defaultRoutines={
      timeSlot:1,type:'morning',time:'Morning'},
 
     {id:'m2',name:'Dot & Key Cica Oil-Free Moisturizer',
-     instruction:`Apply while face is <strong>slightly damp</strong> (within 60s of drying). 2 fingertip units. Press gently — <strong>do not drag</strong>. Focus on cheeks and forehead.`,
+     instruction:`Apply while face is <strong>slightly damp</strong> (within 60s of drying). Use <strong>2 fingertip units (2FTU)</strong> — product from fingertip to first knuckle on both index fingers. Press gently into skin — <strong>do not drag</strong>. Focus on cheeks and forehead.`,
+     qty:`<strong>📏 Quantity:</strong> 2 FTU = ≈0.5g per application. Too little = no barrier protection. Too much = pilling under sunscreen. The 50g tub lasts ~100 uses at this dose.`,
      why:`Cica calms inflammation and strengthens skin barrier. Oil-free formula won't clog pores.`,
      when:'After face wash, before sunscreen',whenClass:'after-brush',whenIcon:'✅',
      sequence:['Face wash','→ Moisturizer ★','Sunscreen','Deodorant','Get dressed'],
      timeSlot:1,type:'morning',time:'Morning'},
 
     {id:'m3',name:'Detan Dewy Sunscreen SPF 50+',
-     instruction:`<strong>¼ teaspoon minimum</strong> for face alone. Spread evenly. Apply <strong>15 mins before stepping out</strong>. Reapply every 2 hours outdoors.`,
-     why:`UV is the #1 cause of pigmentation and premature aging. Without SPF, all other products work at 30% efficiency.`,
+     instruction:`Dispense <strong>¼ teaspoon (≈1.25ml)</strong> — roughly a ₹2 coin of product — onto palm. Dot 5 dots across forehead, both cheeks, nose, and chin. Blend evenly with upward strokes. Apply <strong>15 mins before stepping out</strong>. Reapply every 2 hours if outdoors.`,
+     qty:`<strong>📏 Quantity:</strong> ¼ tsp = 1.25ml per application. Most people use only 25% of this — that's why SPF fails. Don't be shy. At correct dose, a 50ml tube lasts ~40 uses.`,
+     why:`UV is the #1 cause of pigmentation and premature aging. Without full-dose SPF, all your other products work at 30% efficiency.`,
      when:'Just before going out — last skincare step',whenClass:'before-going-out',whenIcon:'🌞',
      sequence:['Moisturizer','Deodorant','Get dressed','→ Sunscreen ★','Step outside'],
      timeSlot:1,type:'morning',time:'Morning'},
 
     {id:'m4',name:'Nivea Men Fresh Active Deodorant',
-     instruction:`Apply to <strong>clean, dry underarms</strong> only after bath. Let dry before dressing. Wait 20 mins if shaved.`,
+     instruction:`Apply to <strong>clean, dry underarms</strong> only after bath. <strong>2–3 swipes per underarm</strong> (roll-on) or a <strong>2-second spray burst per side</strong>. Let dry for 30 seconds before dressing. Wait 20 mins if freshly shaved.`,
+     qty:`<strong>📏 Quantity:</strong> 2–3 swipes or 2-second spray per underarm. More does not increase protection — the formula saturates at this amount.`,
      why:`72h formula — applied correctly once after bath, you're fully covered all day.`,
      when:'After bath, before getting dressed',whenClass:'after-bath',whenIcon:'🚿',
      sequence:['Finish bath','Towel dry','→ Deodorant ★','Get dressed','Sunscreen'],
@@ -863,7 +867,8 @@ const defaultRoutines={
 
   body:[
     {id:'b1',name:'Dermatouch Kojic Acid 1% Syndet Soap',
-     instruction:`pH 5.5 — gentler than alkaline soap. Lather and <strong>leave 30–60 seconds</strong> before rinsing. Focus on neck, arms, and pigmented patches.`,
+     instruction:`Wet body. Rub bar directly on skin to create foam. Apply to neck, arms, and pigmented patches. Leave lather on skin for <strong>30–60 seconds</strong> before rinsing. <strong>Do not scrub hard</strong> — gentle circular motion only.`,
+     qty:`<strong>📏 Quantity:</strong> Light lather across body — let the bar glide, don't press hard. One 75g bar lasts 60–90 days with daily use. Pressing hard wastes product and irritates skin.`,
      why:`Kojic acid inhibits melanin production, targeting tan lines and uneven pigmentation.`,
      when:'During bath — use instead of regular soap',whenClass:'before-bath',whenIcon:'🛁',
      sequence:['Start bath','Wet body','→ Kojic soap (leave 60s) ★','Rinse','Towel dry'],
@@ -871,7 +876,8 @@ const defaultRoutines={
   ],
 
   sanfe:{id:'b2',name:'Sanfe Instant Tan & Dead Skin Removal Gel',
-   instruction:`<strong>Body only — never face</strong>. Apply on damp skin after wetting in bath. Circular motions 2–3 mins. Dead skin rolls off. Rinse completely.`,
+   instruction:`Apply on <strong>arms, neck, body only — never face</strong>. Squeeze a <strong>10cm strip (≈3–4ml)</strong> per limb. Work in gentle circular motions for <strong>2–3 minutes</strong> — dead skin will visibly roll off. Rinse completely. <strong>Max 3× per week.</strong>`,
+   qty:`<strong>📏 Quantity:</strong> 10cm strip per limb = 3–4ml. Full body session (arms + neck) uses ≈15–20ml. The 100g tube gives ≈5–6 full sessions. Overusing causes redness.`,
    why:`Physical + chemical exfoliation removes dead skin and helps Kojic acid penetrate deeper.`,
    when:'During bath — before Kojic soap',whenClass:'before-bath',whenIcon:'🧼',
    sequence:['Start bath','Wet body','→ Sanfe exfoliate ★','Kojic soap (60s)','Rinse','Dry'],
@@ -879,7 +885,8 @@ const defaultRoutines={
 
   night:[
     {id:'n1',name:'Derma Co 2% Salicylic Acid Face Wash',
-     instruction:`Evening cleanse is <strong>more important</strong> than morning. Lather <strong>90 seconds</strong> — removing SPF, pollution, sebum. Rinse cool to prep for actives.`,
+     instruction:`Wet face. Pump <strong>1 full pump (≈2ml)</strong> onto palm. Lather and massage for a full <strong>90 seconds</strong> — longer than morning because you're removing SPF, pollution, and a full day of sebum. Rinse thoroughly with cool water.`,
+     qty:`<strong>📏 Quantity:</strong> 1 pump = ≈2ml — same as morning. If skin feels tight after rinsing, you may be over-cleansing. Should feel clean, not dry.`,
      why:`Sleeping with SPF and pollution residue causes breakouts. Night cleansing opens the path for actives.`,
      switchNote:`⚠️ ~15% remaining — switch to Minimalist SA+LHA when finished.`,
      when:'After dinner, before bed — first night step',whenClass:'after-dinner',whenIcon:'🍽️',
@@ -887,22 +894,25 @@ const defaultRoutines={
      timeSlot:5,type:'night',time:'Night'},
 
     {id:'n2',name:'Minimalist Vitamin C + Glow Serum',
-     instruction:`On <strong>completely dry face</strong> — wait 2–3 mins after washing. 3–4 drops. Press in, don't rub. Focus on pigmented areas. <strong>Wait 3 minutes</strong> before moisturizer. Use on <strong>Tue / Thu / Sat / Sun nights only.</strong>`,
-     why:`Vitamin C inhibits melanin and brightens spots. Night application avoids UV degradation — significantly more effective. Alternated with Kojic Cream to avoid over-exfoliation.`,
+     instruction:`On <strong>completely dry face</strong> — wait 2–3 mins after washing. Dispense <strong>3–4 drops (≈0.2ml)</strong> onto fingertips. Press into skin — forehead, cheeks, nose, chin. <strong>Do not rub.</strong> Hold each area 2 seconds. Extra drops on beard border and cheek dark spots. <strong>Wait 3 full minutes</strong> before moisturizer. Use on <strong>Tue / Thu / Sat / Sun nights only.</strong>`,
+     qty:`<strong>📏 Quantity:</strong> 3–4 drops = ≈0.2ml. More than 4 drops does not increase efficacy — absorption plateaus. The 30ml bottle gives ≈150 applications. Never use on same night as Kojic Cream.`,
+     why:`Vitamin C inhibits melanin and brightens dark spots. Night application avoids UV degradation — significantly more effective.`,
      when:'After night face wash — Tue/Thu/Sat/Sun nights',whenClass:'before-bed',whenIcon:'🌙',
      sequence:['Night face wash','Wait 2–3 mins','→ Vit C serum ★ (Tue/Thu/Sat/Sun)','Wait 3 mins','Moisturizer','Sleep'],
      timeSlot:5,type:'night',time:'Night'},
 
     {id:'n4',name:'Derma Co 2% Kojic Acid Face Cream',
-     instruction:`On <strong>dry face</strong> after cleansing — wait 2 mins. Apply a <strong>pea-sized amount</strong> only. Spread evenly across face avoiding eye area. <strong>Do not layer with Vitamin C</strong> on the same night — use one or the other. Use on <strong>Mon / Wed / Fri nights only.</strong>`,
-     why:`2% Kojic Acid + Glycolic Acid + Vit C triple-action directly targets your pigmentation and uneven skin tone. Glycolic acid exfoliates surface dead cells, helping Kojic penetrate deeper. Alternating with Vit C serum prevents acid overload and barrier damage.`,
+     instruction:`On <strong>dry face</strong> — wait 2 mins after washing. Dispense <strong>1 pump = pea-sized amount (≈0.5g)</strong>. Dot 5 small dots: forehead, both cheeks, nose, chin. Blend with upward strokes. Avoid eye area and lips. <strong>Never combine with Vitamin C on the same night.</strong> Use on <strong>Mon / Wed / Fri nights only.</strong>`,
+     qty:`<strong>📏 Quantity:</strong> 1 pump = pea-sized = ≈0.5g. Strictly 1 pump — Glycolic Acid in this cream causes peeling and redness if overused. The 30g pump gives ≈60 applications at this dose.`,
+     why:`2% Kojic Acid + Glycolic Acid directly targets pigmentation. Glycolic exfoliates dead skin cells so Kojic penetrates deeper and works faster.`,
      when:'After night face wash — Mon/Wed/Fri nights only',whenClass:'before-bed',whenIcon:'🟣',
      sequence:['Night face wash','Wait 2 mins','→ Kojic Cream ★ (Mon/Wed/Fri)','Wait 3 mins','Moisturizer','Sleep'],
      timeSlot:5,type:'night',time:'Night'},
 
     {id:'n3',name:'Dot & Key Cica Oil-Free Moisturizer',
-     instruction:`<strong>Very last step before sleeping</strong> — seals in all actives. Use slightly more than morning. Press upward strokes. Sleep immediately after.`,
-     why:`Occlusive layer prevents TEWL overnight and locks in actives beneath. Cica calms any potential irritation from Kojic or Vit C and promotes deep skin repair.`,
+     instruction:`<strong>Very last step before sleeping.</strong> Use <strong>2.5 FTU (≈0.6g)</strong> — slightly more than morning. Press in upward strokes covering full face and neck. Sleep immediately after.`,
+     qty:`<strong>📏 Quantity:</strong> 2.5 FTU at night vs 2 FTU in morning. The extra half unit compensates for overnight water loss (TEWL). Under-moisturising at night reduces how well your serums work.`,
+     why:`Occlusive layer prevents TEWL overnight and locks in actives. Cica calms any irritation from Kojic or Vit C and promotes deep skin repair.`,
      when:'Last step before sleeping — every night',whenClass:'before-bed',whenIcon:'😴',
      sequence:['Active serum (Vit C or Kojic)','Wait 3 mins','→ Moisturizer ★','Hit the pillow 🛏️'],
      timeSlot:5,type:'night',time:'Night'},
@@ -911,29 +921,33 @@ const defaultRoutines={
   hair:{
     ketocip:{note:'Ketocip Wash Day (Mon & Thu) — Medical Antifungal Protocol',noteIcon:'💊',tasks:[
       {id:'h1',name:'Apply Minimalist CPH + Oligopeptide Serum',
-       instruction:`Part hair into sections. Dropper <strong>directly to scalp skin</strong>. Massage circles <strong>2–3 mins</strong>. Cover crown, temples, nape.`,
-       why:`Climbazole + Piroctone Olamine need dwell time on scalp. Massage boosts microcirculation.`,
+       instruction:`Part hair into <strong>4–5 sections</strong> using a comb. Hold dropper <strong>directly against scalp</strong>. Apply <strong>1ml per section = 4–5ml total</strong> (8–10 full droppers). Massage each section in slow circles for 30 seconds. Cover crown, temples, and nape.`,
+       qty:`<strong>📏 Quantity:</strong> 4–5ml total per session. The 50ml bottle gives ≈10–12 applications. Under-applying means incomplete scalp coverage and weaker antifungal effect.`,
+       why:`Climbazole + Piroctone Olamine need dwell time on scalp. Massage boosts microcirculation for better absorption.`,
        when:'1 hour before bath — do this first',whenClass:'before-bath',whenIcon:'⏱️',
        sequence:['→ CPH serum ★','Wait 1 full hour','Then go to bath','Ketocip shampoo','Plom serum'],
        timeSlot:1,type:'hair',time:'Pre-bath'},
 
       {id:'h2',name:'Wait 1 Full Hour',
-       instruction:`Set a phone timer. <strong>Do not go to bath early.</strong> During this wait — do your morning face routine, brush teeth, have breakfast.`,
+       instruction:`Set a phone timer for <strong>60 minutes</strong>. Do not go to bath early. During this wait — do your morning face routine, brush teeth, have breakfast.`,
+       qty:`<strong>📏 Time:</strong> 60 minutes minimum. 90 minutes is fine. Less than 45 minutes significantly reduces the antifungal effect.`,
        why:`Climbazole needs contact time to disrupt fungal cell membranes. Rinsing early reduces efficacy by 60%.`,
        when:'Between CPH serum and bath — productive wait',whenClass:'before-bath',whenIcon:'⌛',
        sequence:['CPH serum applied','→ Wait 60 mins ★ (do face routine now)','Then shower'],
        timeSlot:1,type:'hair',time:'Before Bath'},
 
       {id:'h3',name:'Ketocip Ketoconazole 2% Shampoo',
-       instruction:`Inside bath — apply to wet scalp. Good lather. <strong>Leave 3–5 minutes</strong>. Rinse thoroughly. Washes off CPH serum and Ketocip together.`,
-       why:`Ketoconazole 2% controls Malassezia fungus — primary cause of dandruff and scalp inflammation.`,
+       instruction:`Wet hair thoroughly. Apply <strong>5–10ml (1–2 teaspoons)</strong> directly to scalp — not hair length. Massage to a good lather covering full scalp. <strong>Leave for 3–5 minutes</strong> — use a timer. Rinse thoroughly until water runs clear.`,
+       qty:`<strong>📏 Quantity:</strong> 5–10ml per wash = 1–2 teaspoons. The 100ml bottle gives 10–20 washes. More product does not improve antifungal action — coverage matters more than quantity.`,
+       why:`Ketoconazole 2% controls Malassezia fungus — the primary cause of dandruff and scalp inflammation.`,
        when:'During bath — after wetting hair',whenClass:'before-bath',whenIcon:'🚿',
        sequence:['Wet hair in bath','→ Ketocip shampoo ★','Leave 5 mins','Rinse','Finish bath','Towel dry','Plom serum'],
        timeSlot:1,type:'hair',time:'During Bath'},
 
       {id:'h4',name:'Plom Rosemary Redensyl Hair Growth Serum',
-       instruction:`Immediately after bath — towel dry to <strong>damp, not dripping</strong>. Sections, apply serum to scalp. Massage 2 mins. <strong>Leave-in — do NOT rinse.</strong>`,
-       why:`Rosemary stimulates follicle blood flow. Redensyl activates dormant stem cells. Leave-in means it works all day.`,
+       instruction:`Immediately after bath — towel dry to <strong>damp, not dripping</strong>. Part into <strong>4–5 sections</strong>. Apply <strong>6–8 drops per section = 1–1.5ml total</strong> directly to scalp skin. Massage with fingertips in circles for 2 minutes. <strong>Leave-in — do NOT rinse.</strong>`,
+       qty:`<strong>📏 Quantity:</strong> 1–1.5ml total = 25–30 drops. The 30ml bottle lasts ≈20–30 applications. Apply only to scalp skin — not hair strands.`,
+       why:`Rosemary stimulates blood flow to follicles. Redensyl activates dormant stem cells. Leave-in means it works all day.`,
        when:'Right after bath — while hair is still damp',whenClass:'after-bath',whenIcon:'💧',
        sequence:['Finish bath','Towel dry hair','→ Plom serum ★ (leave-in)','Style hair','Get dressed'],
        timeSlot:1,type:'hair',time:'After Bath'},
@@ -941,29 +955,33 @@ const defaultRoutines={
 
     regular:{note:'Regular Wash Day (Wed & Sat) — Maintenance Protocol',noteIcon:'🌿',tasks:[
       {id:'h5',name:'Apply Minimalist CPH + Oligopeptide Serum',
-       instruction:`Same as Ketocip days — part hair, dropper to scalp, massage circles <strong>2–3 mins</strong>.`,
+       instruction:`Same as Ketocip days — part into <strong>4–5 sections</strong>, apply <strong>4–5ml total (8–10 droppers)</strong> to scalp, massage each section 30 seconds.`,
+       qty:`<strong>📏 Quantity:</strong> 4–5ml total — same dose as Ketocip days. Consistent coverage prevents fungal regrowth.`,
        why:`3–4× per week coverage prevents fungal regrowth between Ketocip days.`,
        when:'1 hour before bath — same as Ketocip days',whenClass:'before-bath',whenIcon:'⏱️',
        sequence:['→ CPH serum ★','Wait 1 full hour','Then shower','Mild shampoo','Plom serum'],
        timeSlot:1,type:'hair',time:'Pre-bath'},
 
       {id:'h6',name:'Wait 1 Full Hour',
-       instruction:`Mandatory wait. <strong>Don't wet hair.</strong> Use this time for face routine, breakfast, or brushing teeth.`,
+       instruction:`Mandatory 60-minute wait. <strong>Do not wet hair.</strong> Use time for face routine, breakfast, or brushing teeth.`,
+       qty:`<strong>📏 Time:</strong> 60 minutes minimum — no exceptions on regular wash days either.`,
        why:`Non-negotiable dwell time for CPH actives to work effectively.`,
        when:'Between CPH serum and bath',whenClass:'before-bath',whenIcon:'⌛',
        sequence:['CPH serum applied','→ Wait 60 mins ★','Then shower'],
        timeSlot:1,type:'hair',time:'Before Bath'},
 
       {id:'h7',name:'Mild / Regular Shampoo Rinse',
-       instruction:`Inside bath — gentle lather. Rinse off CPH serum completely. <strong>No vigorous scrubbing.</strong>`,
-       why:`Mild cleanse on non-Ketocip days. Overusing Ketocip causes antifungal resistance.`,
+       instruction:`Apply <strong>5ml (1 teaspoon)</strong> to wet scalp. Gentle single lather — no vigorous scrubbing. Rinse CPH serum off completely. <strong>No repeat lathering.</strong>`,
+       qty:`<strong>📏 Quantity:</strong> 5ml = 1 teaspoon. One lather is enough on non-Ketocip days. Over-shampooing strips natural scalp oils.`,
+       why:`Mild cleanse removes oil without stripping. Overusing Ketocip causes antifungal resistance.`,
        when:'During bath — gentle wash only',whenClass:'before-bath',whenIcon:'🚿',
        sequence:['Wet hair','→ Mild shampoo ★','Rinse','Finish bath','Towel dry','Plom serum'],
        timeSlot:1,type:'hair',time:'During Bath'},
 
       {id:'h8',name:'Plom Rosemary Redensyl Hair Growth Serum',
-       instruction:`Right after bath — damp scalp. Apply serum to sections. Massage 2 mins. <strong>Leave-in.</strong>`,
-       why:`Daily Rosemary + Redensyl application gives compounding growth results over weeks.`,
+       instruction:`Right after bath — damp scalp. Part into <strong>4–5 sections</strong>. Apply <strong>1–1.5ml total (25–30 drops)</strong> to scalp. Massage 2 minutes. <strong>Leave-in.</strong>`,
+       qty:`<strong>📏 Quantity:</strong> 1–1.5ml — same dose as Ketocip days. Consistent daily application is what builds long-term results.`,
+       why:`Daily Rosemary + Redensyl gives compounding growth and gray-reduction results over weeks.`,
        when:'Right after bath — damp hair',whenClass:'after-bath',whenIcon:'💧',
        sequence:['Finish bath','Towel dry','→ Plom serum ★ (leave-in)','Get dressed'],
        timeSlot:1,type:'hair',time:'After Bath'},
@@ -971,7 +989,8 @@ const defaultRoutines={
 
     nowash:{note:'No Hair Wash Today — Serum-Only Protocol',noteIcon:'✨',tasks:[
       {id:'h9',name:'Plom Rosemary Redensyl Serum on Dry Scalp',
-       instruction:`<strong>Dry scalp only</strong> — no bath needed for this. Part hair in sections. Dispense at roots. Massage circles <strong>2–3 mins</strong>. Leave-in. Best done morning or evening.`,
+       instruction:`Apply on <strong>dry scalp</strong> — no bath needed. Part into <strong>4–5 sections</strong>. Apply <strong>0.5–1ml total (10–20 drops)</strong> — slightly less than post-bath since dry scalp absorbs faster. Massage in circles for <strong>2–3 minutes</strong>. Leave-in.`,
+       qty:`<strong>📏 Quantity:</strong> 0.5–1ml on no-wash days (less than post-bath dose). Over-applying on dry scalp causes buildup and greasiness.`,
        why:`On no-wash days, skip CPH (it needs rinsing). Plom daily keeps follicle stimulation consistent.`,
        when:'Anytime — morning after brushing or evening before bed',whenClass:'anytime',whenIcon:'🔄',
        sequence:['After brushing teeth (morning)','→ Plom serum ★ on dry scalp','OR before bed → Plom serum ★'],
@@ -1716,7 +1735,9 @@ function renderContent(){
         </div>
         <div class="task-body">
           <div class="task-name">${task.name}${replacedBadge}${lowStockBadge}${outBadge}</div>
-          <div class="task-instruction">${task.instruction}<br><span class="why">Why: ${task.why}</span></div>
+          <div class="task-instruction">${task.instruction}</div>
+          ${task.qty?`<div style="font-size:11px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:6px 10px;margin:4px 0;line-height:1.5;color:var(--muted)">${task.qty}</div>`:''}
+          <div class="task-instruction"><span class="why">🩺 Why: ${task.why}</span></div>
           ${switchHtml}
           <div class="task-meta">
             <span class="task-time-badge${isActive?' active-time':''}">${task.time}</span>
